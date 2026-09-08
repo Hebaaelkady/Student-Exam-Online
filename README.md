@@ -1,51 +1,54 @@
-# 🎓 بوابة امتحانات أبناؤنا في الخارج - الأزهر الشريف
-### Al-Azhar Online Student Exam System
+# 🎓 Al-Azhar Online Exam System  
+### For Egyptian Students Abroad  
 
-نظام إلكتروني متكامل وآمن مخصص لإجراء وإدارة امتحانات الطلاب المصريين الدارسين بنظام "أبناؤنا في الخارج" تحت إشراف قطاع المعاهد الأزهرية - الأزهر الشريف.
-
----
-
-## 🌟 نظرة عامة (Overview)
-
-تم تصميم وتطوير هذا النظام لتمكين طلاب الأزهر الشريف في مختلف دول العالم من أداء امتحاناتهم الفصلية والسنوية أونلاين بكل يسر وسهولة، مع توفير أعلى معايير الأمان والسرية والموثوقية لنصوص الأسئلة والإجابات، إلى جانب لوحة تحكم وإدارة مخصصة للمشرفين لمتابعة سير الامتحانات وإصدار التقارير اللحظية.
+An integrated online exam system designed for Egyptian students studying abroad under the supervision of Al-Azhar Al-Sharif.  
 
 ---
 
-## ✨ المميزات الرئيسية (Key Features)
+## 📖 Overview  
 
-### 1. 📱 تجربة مستخدم عصرية ومتجاوبة بالكامل (Responsive UI/UX)
-- تصميم  متوافق تماماً مع **الهواتف الذكية (Mobile)**، الأجهزة اللوحية (Tablets)، والشاشات المكتبية.
-- واجهة تصفح مريحة .
-- خريطة تنقل تفاعلية بين الأسئلة تتيح للطالب معرفة الأسئلة المتبقية والمجابة فوراً.
-
-### 2. 🛡️ أمان وحماية متقدمة (Security Hardening)
-- **حماية من هجمات XSS:** تعقيم وتطهير فوري لكافة نصوص الأسئلة والخيارات المدخلة باستخدام `SecurityHelper.SanitizeHtml` لمنع حقن أي كود برمجي خبيث مع الحفاظ على التنسيقات والجداول والصور.
-- **حماية متقدمة ضد التخمين (Dual-Track Rate Limiter):** نظام ذكي لمراقبة محاولات الدخول الخاطئة على مستوى (IP & Username). في حال تكرار 5 محاولات خاطئة، يتم تفعيل تجميد مؤقت لمدة 60 ثانية مع عداد تنازلي تفاعلي حي دون قفل حساب الطالب نهائياً لتفادي تعطيل الطلاب.
-- **تأمين الصلاحيات (Authorization & IDOR Protection):** تأمين كامل لجميع دوال وتقارير وبيانات الطلاب في `StudentReportController` والتحقق الصارم من صلاحيات المشرفين.
-- **توكن مشفر (Encrypted JWT):** إدارة جلسات آمنة للمشرفين والطلاب باستخدام JSON Web Tokens المشفرة وتخزينها في كوكيز آمنة (`HttpOnly` و `Secure`).
-- **حماية ضد CSRF:** تطبيق `[ValidateAntiForgeryToken]` على كافة الطلبات والنماذج البرمجية واستدعاءات AJAX.
-- **تطبيع الأرقام (Digit Normalization):** دعم تلقائي لتحويل الأرقام العربية المشرقية (`٠١٢٣`) إلى أرقام إنجليزية (`0123`) لتفادي أخطاء الإدخال من الهواتف الذكية.
-
-### 3. ⚡ أداء واستقرار عالي
-- حفظ تلقائي وفوري لكل إجابة يختارها الطالب دون الحاجة لإعادة تحميل الصفحة.
-- مؤقت زمني دقيق يعمل بالتزامن مع توقيت السيرفر الرسمي ويقوم بإغلاق وتسليم الامتحان تلقائياً عند انتهاء الوقت المحدد.
-- عزل ملفات التكوين الحساسة وكلمات مرور قواعد البيانات عن المستودع البرمجي (`ConnectionStrings.config` و `AppSettings.secrets.config`).
+This system allows Al-Azhar students worldwide to take their semester and annual exams online easily and securely. It provides a safe environment for managing exam questions and answers, along with a dedicated admin dashboard for monitoring exams and generating reports.  
 
 ---
 
-## 🛠️ التقنيات المستخدمة (Tech Stack)
+## ✨ Key Features  
 
-| المجال | التقنية / المكتبة |
+### 1. 📱 Fully Responsive & Modern UI  
+- Works perfectly on **smartphones**, tablets, and desktops.  
+- Easy-to-use interface with a visual progress tracker showing answered and pending questions.  
+
+### 2. 🔒 Security Features  
+
+Simple but strong security to keep user data and exam content safe:  
+
+- **XSS Protection** – All user inputs (questions, choices, etc.) are automatically cleaned using `SecurityHelper.SanitizeHtml` to prevent malicious code injection while preserving formatting, tables, and images.  
+- **Login Rate Limiting** – After 5 failed login attempts, the account is temporarily locked for 60 seconds with a live countdown timer—without permanently blocking students.  
+- **Access Control** – Strict authorization checks on `StudentReportController` ensure only admins can access student reports and sensitive data.  
+- **Secure Sessions** – Encrypted JWT tokens are stored in `HttpOnly` and `Secure` cookies for safe session management.  
+- **CSRF Protection** – All forms and AJAX requests are protected using `[ValidateAntiForgeryToken]`.  
+- **Smart Number Input** – Automatically converts Arabic numerals (٠١٢٣) to English numerals (0123) to prevent input errors.  
+
+### 3. ⚡ High Performance & Reliability  
+- **Auto-save** – Each answer is saved instantly without page reload.  
+- **Accurate Timer** – Syncs with server time and auto-submits the exam when time runs out.  
+- **Secure Configuration** – Sensitive files like `ConnectionStrings.config` and `AppSettings.secrets.config` are excluded from the repository.  
+
+---
+
+## 🛠️ Tech Stack  
+
+| Area | Technology / Library |
 | :--- | :--- |
-| **Backend Framework** | ASP.NET MVC 5 (.NET Framework 4.8) |
-| **Database & ORM** | Microsoft SQL Server + Entity Framework 6 |
-| **Authentication & Security** | ASP.NET Identity, JWT (Jose-JWT), Anti-Forgery Tokens |
-| **Client-Server Communication** | Asynchronous AJAX (HTTP POST) & JSON API |
-| **Frontend UI** | HTML5, CSS3 (Modern Flexbox/Grid), JavaScript (ES6), Bootstrap |
-| **Typography & Icons** | Droid Arabic Kufi & Modern Web Fonts |
+| **Backend** | ASP.NET MVC 5 (.NET Framework 4.8) |
+| **Database** | Microsoft SQL Server + Entity Framework 6 |
+| **Auth & Security** | ASP.NET Identity, JWT (Jose-JWT), CSRF Tokens |
+| **API & Communication** | AJAX (HTTP POST) + JSON |
+| **Frontend** | HTML5, CSS3 (Flexbox/Grid), JavaScript (ES6), Bootstrap |
+| **Fonts & Icons** | Droid Arabic Kufi + Modern Web Fonts |
 
 ---
 
-## 📄 حقوق الملكية (Copyright)
+## 📄 Copyright  
 
-برمجة وتصميم وتنفيذ: م. هبة القاضي.
+Developed & Designed by: **Eng. Heba El-Kady**  
+All rights reserved © 2026
