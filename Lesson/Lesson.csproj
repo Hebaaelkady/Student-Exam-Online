@@ -414,7 +414,6 @@
       <DependentUpon>Lessons.tt</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
-    <Compile Include="UptimeHub.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Student\Views\Exams\Main.cshtml" />
