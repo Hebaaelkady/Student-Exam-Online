@@ -41,7 +41,7 @@
 | **Backend Framework** | ASP.NET MVC 5 (.NET Framework 4.8) |
 | **Database & ORM** | Microsoft SQL Server + Entity Framework 6 |
 | **Authentication & Security** | ASP.NET Identity, JWT (Jose-JWT), Anti-Forgery Tokens |
-| **Real-time Engine** | Microsoft SignalR |
+| **Client-Server Communication** | Asynchronous AJAX (HTTP POST) & JSON API |
 | **Frontend UI** | HTML5, CSS3 (Modern Flexbox/Grid), JavaScript (ES6), Bootstrap |
 | **Typography & Icons** | Droid Arabic Kufi & Modern Web Fonts |
 
