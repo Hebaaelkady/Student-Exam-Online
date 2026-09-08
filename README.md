@@ -14,9 +14,8 @@
 ## ✨ المميزات الرئيسية (Key Features)
 
 ### 1. 📱 تجربة مستخدم عصرية ومتجاوبة بالكامل (Responsive UI/UX)
-- تصميم متطور وعصري متوافق تماماً مع **الهواتف الذكية (Mobile)**، الأجهزة اللوحية (Tablets)، والشاشات المكتبية.
-- واجهة تصفح مريحة للعين بألوان وهوية الأزهر الشريف الرسمية.
-- قائمة علوية (Header) ثابتة وواضحة تعرض بيانات الطالب، المادة، والوقت المتبقي بدقة.
+- تصميم  متوافق تماماً مع **الهواتف الذكية (Mobile)**، الأجهزة اللوحية (Tablets)، والشاشات المكتبية.
+- واجهة تصفح مريحة .
 - خريطة تنقل تفاعلية بين الأسئلة تتيح للطالب معرفة الأسئلة المتبقية والمجابة فوراً.
 
 ### 2. 🛡️ أمان وحماية متقدمة (Security Hardening)
@@ -47,59 +46,6 @@
 
 ---
 
-## 🚀 دليل التثبيت والتشغيل المحلي (Setup Guide)
-
-### المتطلبات الأساسية (Prerequisites):
-- **Visual Studio 2019** أو **Visual Studio 2022** مع حزمة `.NET desktop development` و `ASP.NET and web development`.
-- **Microsoft SQL Server 2016** أو أحدث.
-- **IIS Express** أو خادم **IIS** محلي.
-
-### خطوات التشغيل:
-
-1. **استنساخ المستودع (Clone Repository):**
-   ```bash
-   git clone https://github.com/Hebaaelkady/Student-Exam-Online.git
-   cd Student-Exam-Online
-   ```
-
-2. **إعداد ملفات الاتصال والمفاتيح السرية:**
-   قم بنسخ الملفات الاسترشادية وتعديلها ببيانات قاعدة بياناتك ومفاتيحك الخاصة:
-   - قم بإنشاء ملف `Lesson/ConnectionStrings.config` مسترشداً بـ `ConnectionStrings.config.example`:
-     ```xml
-     <connectionStrings>
-         <add name="DefaultConnection"
-              connectionString="Data Source=YOUR_SERVER;User ID=YOUR_USER;Password=YOUR_PASSWORD;initial catalog=StudentExamOutside"
-              providerName="System.Data.SqlClient" />
-         <add name="LessonsEntities"
-              connectionString="metadata=res://*/Models.Lessons.csdl|res://*/Models.Lessons.ssdl|res://*/Models.Lessons.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=YOUR_SERVER;User ID=YOUR_USER;Password=YOUR_PASSWORD;initial catalog=StudentExamOutside;App=EntityFramework&quot;"
-              providerName="System.Data.EntityClient" />
-     </connectionStrings>
-     ```
-   - قم بإنشاء ملف `Lesson/AppSettings.secrets.config` مسترشداً بـ `AppSettings.secrets.config.example`:
-     ```xml
-     <appSettings>
-         <add key="JwtSecretKey" value="YOUR_SECURE_JWT_SECRET_KEY_AT_LEAST_32_CHARACTERS" />
-         <add key="AdminUserNames" value="admin1,admin2" />
-         <add key="EncryptionMasterKey" value="YOUR_AES_256_BASE64_ENCRYPTION_KEY" />
-     </appSettings>
-     ```
-
-3. **استعادة حزم NuGet (Restore NuGet Packages):**
-   افتح المشروع في Visual Studio واضغط بالزر الأيمن على الـ Solution ثم اختر **Restore NuGet Packages**.
-
-4. **البناء والتشغيل (Build & Run):**
-   اضغط `Ctrl + Shift + B` لبناء المشروع، ثم `F5` لتشغيل الموقع في المتصفح.
-
----
-
-## 🔒 الأمان والخصوصية (Security & Privacy)
-
-- لا يحتوي هذا المستودع على أي بيانات اعتماد أو كلمات مرور أو سجلات طلاب فعلية.
-- كافة بيانات الاتصال ومفاتيح التشفير تُدار عبر ملفات تكوين محلية مستثناة بالكامل عبر `.gitignore`.
-
----
-
 ## 📄 حقوق الملكية (Copyright)
 
-جميع الحقوق محفوظة © **الأزهر الشريف** - قطاع المعاهد الأزهرية.
-الإشراف والتطوير: م. هبة القاضي.
+برمجة وتصميم وتنفيذ: م. هبة القاضي.
