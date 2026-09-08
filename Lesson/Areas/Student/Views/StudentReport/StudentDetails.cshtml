@@ -1,0 +1,124 @@
+﻿﻿@model List<Lesson.Models.StudentUnansweredReport>
+@{
+    ViewBag.Title = "تفاصيل الطالب";
+    Layout = "~/Areas/Student/Views/Shared/_LayoutAdmin.cshtml";
+
+    var studentNumber = ViewBag.StudentNumber as int?;
+    var term = ViewBag.Term as int? ?? 1;
+}
+
+<div class="container mt-4">
+    <!-- معلومات الطالب -->
+    @if (Model.Any())
+    {
+        var student = Model.First();
+        <div class="card mb-4 shadow">
+            <div class="card-header bg-dark text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user-graduate"></i>
+                        تفاصيل الطالب: @student.StudentName
+                        <small>(@student.UserName)</small>
+                    </h4>
+                    <div>
+                        <span class="badge bg-light text-dark">الرقم: @student.StudentNumber</span>
+                        <span class="badge bg-info ms-2">@student.ClassName</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <p><strong><i class="fas fa-flag"></i> البلد:</strong> @student.CountryName</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p>
+                            <strong><i class="fas fa-calendar"></i> الفصل:</strong>
+                            @(term == 1 ? "الفصل الأول" : "الفصل الثاني")
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <p>
+                            <strong><i class="fas fa-question-circle"></i> إجمالي غير مجابة:</strong>
+                            <span class="badge bg-danger">@Model.Count() سؤال</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- تفاصيل الامتحانات -->
+        <div class="row">
+            @foreach (var examGroup in Model.GroupBy(r => r.ExamID))
+            {
+                var examFirst = examGroup.First();
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header @(examFirst.UnansweredCount > 0 ? "bg-danger text-white" : "bg-success text-white")">
+                            <h5 class="mb-0">
+                                <i class="fas fa-file-alt"></i> @examFirst.ExamName
+                                <small>@examFirst.SubjectName</small>
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>التاريخ:</strong> @examFirst.ExamDate?.ToString("yyyy/MM/dd")</p>
+                            <p><strong>الوقت:</strong> @examFirst.TimeFrom - @examFirst.TimeTo</p>
+
+                            <div class="progress mb-3" style="height: 25px;">
+                                @{
+                                    int answeredPercent = examFirst.TotalQuestions > 0
+                                        ? (examFirst.AnsweredCount * 100) / examFirst.TotalQuestions
+                                        : 0;
+                                    int unansweredPercent = examFirst.TotalQuestions > 0
+                                        ? (examFirst.UnansweredCount * 100) / examFirst.TotalQuestions
+                                        : 0;
+                                }
+                                <div class="progress-bar bg-success" style="width: @answeredPercent%"
+                                     role="progressbar">
+                                    مجابة (@examFirst.AnsweredCount)
+                                </div>
+                                <div class="progress-bar bg-danger" style="width: @unansweredPercent%"
+                                     role="progressbar">
+                                    غير مجابة (@examFirst.UnansweredCount)
+                                </div>
+                            </div>
+
+                            <p><strong>الدرجة الكلية:</strong> @examFirst.TotalPossibleDegree</p>
+                            <p>
+                                <strong>الحالة:</strong>
+                                @if (examFirst.IsExamFinished)
+                                {
+                                    <span class="badge bg-secondary">انتهى</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">نشط</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            <h4><i class="fas fa-info-circle"></i> لا توجد بيانات</h4>
+            <p>لا توجد أسئلة غير مجابة للطالب رقم @studentNumber</p>
+        </div>
+    }
+
+    <!-- أزرار التنقل -->
+    <div class="mt-4 text-center">
+        <a href="@Url.Action("Index")" class="btn btn-primary">
+            <i class="fas fa-search"></i> بحث جديد
+        </a>
+        <a href="@Url.Action("GenerateReport", new { StudentNumber = studentNumber, Term = term })"
+           class="btn btn-info">
+            <i class="fas fa-file-alt"></i> تقرير كامل
+        </a>
+       
+    </div>
+</div>

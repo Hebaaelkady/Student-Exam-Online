@@ -1,0 +1,236 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الموقع التعليمي للازهر الشريف</title>    
+   
+<link href="~/Content/glyphicon.css" rel="stylesheet" />
+ 
+<link href="~/Content/Common.css" rel="stylesheet" />
+    <link href="~/Content/demo.css" rel="stylesheet" />
+<script src="~/Scripts/modernizr.custom.63321.js"></script>
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+
+<script type="text/javascript" src="~/Scripts/jquery-hover-effect.js"></script>
+<script type="text/javascript">
+    //Image Hover
+    jQuery(document).ready(function () {
+        jQuery(function () {
+            jQuery('ul.book-thumbs > li').hoverdir();
+        });
+    });
+</script>
+    <script type="text/javascript" src="~/Scripts/jquery.wheelmenu.js"></script>
+<script type="text/javascript" src="~/Scripts/main_002.js"></script>
+<script type="text/javascript">
+    var PEXETO = PEXETO || {}; PEXETO.lightboxOptions = { "theme": "pp_default", "animation_speed": "normal", "overlay_gallery": false, "allow_resize": true }; PEXETO.disableRightClick = true; PEXETO.stickyHeader = true; jQuery(document).ready(function ($) {
+        PEXETO.init.initSite(); PEXETO.woocommerce.init(true);
+
+    });
+
+    $(document).ready(function () {
+        $(document).on('mouseenter', '.item', function () {
+            $(this).find(":button").show();
+        }).on('mouseleave', '.item', function () {
+            $(this).find(":button").hide();
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+</head>
+<body class="fixed-header  ">
+    <div id="header" class="span-xs12 nopadding-hor">
+
+        @*<ul class="nav navbar-nav">
+            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+            <li>@Html.ActionLink("About", "About", "Home")</li>
+            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+        </ul>*@
+        <div id="left-flyout-nav" class="layout-left-flyout visible-sm"></div>
+        <div class="layout-right-content">
+
+
+            <div class="gray-graient header">
+
+
+
+                <div id="name"></div>
+
+                <div class="navbar ">
+
+                    <!-- Trigger -->
+                    <a class="btn-navbar btn-navbar-navtoggle btn-flyout-trigger" href="#">
+                        <span class="icon-bar btn-flyout-trigger"></span>
+                        <span class="icon-bar btn-flyout-trigger"></span>
+                        <span class="icon-bar btn-flyout-trigger"></span>
+                    </a>
+                    <div class="logo span-sm5-offset " id="logo-container"><img src="~/images/logo-bg.png" /></div>
+                    <!-- Structure -->
+                    <nav class="the-nav nav-collapse clearfix span-lg1-offset span-md1-offset span-sm0-offset animated bounceInDown ">
+                        <ul class="nav nav-pill ">
+                            <li class="dropdown">
+                             
+                                @Html.ActionLink("الرئيسية", "../Home/Inner")
+                            </li>
+                            <li class="dropdown">
+                                <a href="#">المرحلة الابتدائية</a>
+                                <ul class="subnav">
+                                    <li>
+                                        @Html.ActionLink("الصف الاول الابتدائي", "../Subjects", new { StageRowID = 3})
+                                    </li>
+                                    <li>
+                                        @Html.ActionLink("الصف الثاني الابتدائي", "../Subjects", new { StageRowID = 4 })
+                                    </li>
+                                    <li>
+                                        @Html.ActionLink("الصف الثالث الابتدائي", "../Subjects", new { StageRowID = 5 })
+                                    </li>
+                                    <li>
+                                        @Html.ActionLink("الصف الرابع الابتدائي", "../Subjects", new { StageRowID = 6 })
+                                    </li>
+                                    <li>
+                                        @Html.ActionLink("الصف الخامس الابتدائي", "../Subjects", new { StageRowID = 12 })
+                                    </li>
+                                    <li>
+                                        @Html.ActionLink("الصف السادس الابتدائي", "../Subjects", new { StageRowID = 13 })
+                                    </li> 
+
+                                  
+                                </ul>
+                            </li>
+
+                            <li class="dropdown">
+                                <a href="#">المرحلة الإعدادية  </a>
+                                <ul class="subnav">
+                                    <li>
+                                        @Html.ActionLink("الصف الاول الإعدادي", "../Subjects", new { StageRowID = 14 })
+                                    </li> 
+                                    <li>
+                                        @Html.ActionLink("الصف الثاني الإعدادي", "../Subjects", new { StageRowID = 15 })
+                                    </li> 
+                                    <li>
+                                        @Html.ActionLink("الصف الثالث الإعدادي", "../Subjects", new { StageRowID = 16 })
+                                    </li> 
+                                 
+
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#">المرحلة الثانوية</a>
+                                <ul class="subnav">
+                                    <li>
+                                        @Html.ActionLink("الصف الاول الثانوى", "../Subjects", new { StageRowID = 17 })
+                                    </li> 
+                                    <li>
+                                        @Html.ActionLink("الصف الثاني الثانوى", "../Subjects", new { StageRowID = 18 })
+                                    </li> 
+                                    <li>
+                                   
+                                        <a href="#">الصف الثالث الثانوى</a>
+                                        <ul class="subnav">
+                                            <li>
+                                                @Html.ActionLink("علمي", "../Subjects", new { StageRowID = 19 , Sho3baID = 1 })
+                                            </li>
+                                            <li>
+                                                @Html.ActionLink("أدبي", "../Subjects", new { StageRowID = 19 , Sho3baID = 2 })
+                                            </li>
+                                           
+
+                                        </ul>
+                                    </li> 
+                                    
+
+                                </ul>
+                            </li>
+                           
+                        </ul>
+                        
+
+                    </nav>
+
+                    @*<div class=""><a href="#">الملق</a></div>*@
+                </div>
+
+
+             @*   @Html.Partial("_menu.cshtml");*@
+
+
+                <div class="clear"></div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class=" block-gradgreen">
+
+
+
+
+
+        <div class="">
+            <div class="pattern2 span-xs12 text_center letters sp-bottom header-inner">
+                <div class="book-header pull-right span-xs3 responsive span-xs1-offset">
+                    <img src="~/images/book.png" />
+                </div>
+                <div class="letter-header span-xs2 span-xs2-offset">
+                    <div class="letter-header1 letter-header-animated"></div>
+                    <div class="letter-header2 letter-header-animated"></div>
+                    <div class="letter-header3 letter-header-animated"></div>
+                    <div class="letter-header4 letter-header-animated"></div>
+                    <div class="letter-header5 letter-header-animated"></div>
+                    <div class="letter-header6 letter-header-animated"></div>
+                    <div class="letter-header7 letter-header-animated"></div>
+                    <div class="letter-header8 letter-header-animated"></div>
+                    <div class="letter-header9 letter-header-animated"></div>
+                    <div class="letter-header10 letter-header-animated"></div>
+                    <div class="letter-header11 letter-header-animated"></div>
+                    <div class="letter-header12 letter-header-animated"></div>
+                    <div class="letter-header13 letter-header-animated"></div>
+                    <div class="letter-header14 letter-header-animated"></div>
+                    <div class="letter-header15 letter-header-animated"></div>
+                    <div class="letter-header16 letter-header-animated"></div>
+                </div>
+                <div id="rays" class="span-xs5"></div>
+                <h2 class="text-foshia pull-left span-xs3-offsetl margin-top sp-right"> @ViewBag.stage  </h2>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+    <div class="span-md1-offset span-md1-offsetl span-md10 span-xs0-offset span-xs0-offsetl span-xs12">
+        @RenderBody()
+    </div>
+        <div class="clear"></div>
+        <div class="footer margin-top block-darkgray  span-xs12 margin-top">
+            <div class="span-xs1-offset span-xs1-offsetl">
+                <div class=" text-white text_center text_center"> 
+                      جميع الحقوق محفوظة لصالح مركز البيانات &copy;
+                    <br />
+                    الأزهر الشريف
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+
+</body>
+</html>

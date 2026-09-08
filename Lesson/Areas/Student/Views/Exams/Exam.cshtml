@@ -1,0 +1,1031 @@
+@model IEnumerable<Lesson.Models.StudentChoiceExam>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Student/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var end = ViewBag.TokonExpireDate != null ? (int)ViewBag.TokonExpireDate : 0;
+}
+
+<link rel="stylesheet" href="@Url.Content("~/Content/quiz.css?v=2026_01")" />
+
+<style>
+    /* =========================================================
+       تحسينات التصميم والتجاوب مع الموبايل (Mobile Responsive UI)
+       ========================================================= */
+    .before-ltr li::before {
+        content: none !important;
+    }
+    .before-ltr .checkmark {
+        left: 0; right: auto; text-align: left;
+    }
+
+    /* حماية من نسخ الأسئلة وتحديد النصوص */
+    body, .page-content, .questionContainer, .arabic-list, .answers {
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+    }
+
+    /* شريط التنبيهات الذكي للأمان واقتراب الوقت */
+    #exam-alert-banner {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 999999;
+        text-align: center;
+        padding: 14px 20px;
+        font-weight: bold;
+        font-size: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+        direction: rtl;
+    }
+
+    /* الحاوية المرنة الرئيسية للتخطيط */
+    .exam-layout-wrapper {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        max-width: 1250px;
+        margin: 15px auto;
+        padding: 0 15px;
+        box-sizing: border-box;
+    }
+
+    /* الشريط الجانبي (المعلومات، العداد، ولوحة التنقل بين الأسئلة) */
+    .exam-sidebar-card {
+        flex: 0 0 280px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+        border: 1px solid #e2e8f0;
+        padding: 20px;
+        position: sticky;
+        top: 15px;
+        height: fit-content;
+        box-sizing: border-box;
+    }
+
+    /* الحاوية الرئيسية لعرض بطاقات الأسئلة */
+    .exam-content-area {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .questionContainer {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+        border: 1px solid #e2e8f0;
+        padding: 25px 30px;
+        min-height: 440px;
+        box-sizing: border-box;
+    }
+
+    /* رأس بطاقة السؤال */
+    .text-foshia {
+        font-size: 18px;
+        font-weight: bold;
+        color: #0f172a;
+        margin-top: 0;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f1f5f9;
+    }
+
+    .question {
+        font-size: 17px;
+        line-height: 1.8;
+        color: #1e293b;
+        margin-bottom: 20px;
+    }
+
+    /* تصميم خيارات الإجابة لتكون مريحة للمس في الموبايل */
+    ul.answers {
+        list-style: none;
+        padding: 0;
+        margin: 15px 0;
+    }
+
+    ul.answers li {
+        margin-bottom: 12px;
+        padding: 0 !important;
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    .containerl {
+        display: flex !important;
+        align-items: center;
+        width: 100%;
+        min-height: 48px;
+        padding: 12px 18px 12px 48px !important;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        background: #f8fafc;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        box-sizing: border-box;
+        font-size: 16px;
+        line-height: 1.6;
+        position: relative;
+    }
+
+    .containerl:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+    }
+
+    /* بطاقة العداد التنازلي */
+    #timer-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 14px;
+        background: #f0fdf4;
+        border: 2px solid #bbf7d0;
+        border-radius: 10px;
+        margin-bottom: 12px;
+    }
+
+    #time {
+        font-size: 32px !important;
+        line-height: 1.2 !important;
+        font-weight: 800;
+        color: #166534;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        letter-spacing: 2px;
+    }
+
+    #sync-status-badge {
+        background: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #a5d6a7;
+        padding: 5px 14px;
+        border-radius: 15px;
+        font-size: 13px;
+        font-weight: bold;
+        display: inline-block;
+    }
+
+    /* شبكة أرقام الأسئلة */
+    .marked-list {
+        display: flex !important;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 0 !important;
+        margin: 15px 0 !important;
+        list-style: none;
+        justify-content: center;
+    }
+
+    .marked-list li.mark {
+        width: 38px;
+        height: 38px;
+        line-height: 38px;
+        border-radius: 50%;
+        text-align: center;
+        font-weight: bold;
+        font-size: 14px;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        float: none !important;
+        margin: 0 !important;
+        color: #fff;
+        user-select: none;
+    }
+
+    .marked-list li.mark:hover {
+        transform: scale(1.12);
+    }
+
+    .marked-list li.mark.active-question {
+        box-shadow: 0 0 0 3px #0284c7 !important;
+        transform: scale(1.15);
+    }
+
+    /* أزرار التنقل (التالي والسابق وإنهاء الامتحان) */
+    .exam-nav-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 2px solid #f1f5f9;
+    }
+
+    .btn-nav {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 10px 28px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        text-decoration: none !important;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+    }
+
+    .btn-nav-prev {
+        background: #e2e8f0;
+        color: #334155 !important;
+    }
+
+    .btn-nav-prev:hover {
+        background: #cbd5e1;
+    }
+
+    .btn-nav-next {
+        background: #16a34a;
+        color: #ffffff !important;
+    }
+
+    .btn-nav-next:hover {
+        background: #15803d;
+    }
+
+    .btn-nav-finish {
+        background: #0f172a !important;
+        color: #ffffff !important;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+    }
+
+    .btn-nav-finish:hover {
+        background: #1e293b !important;
+    }
+
+    .save-question-button {
+        background: #0284c7;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 11px 22px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        margin: 10px 0;
+        transition: background 0.2s ease;
+    }
+
+    .save-question-button:hover {
+        background: #0369a1;
+    }
+
+    textarea.class {
+        width: 100% !important;
+        max-width: 100%;
+        box-sizing: border-box;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 16px;
+        line-height: 1.6;
+        font-family: inherit;
+    }
+
+    textarea.class:focus {
+        border-color: #0284c7;
+        outline: none;
+    }
+
+    /* تخصيصات الشاشات الصغيرة والموبايل */
+    @@media (max-width: 991px) {
+        .exam-layout-wrapper {
+            flex-direction: column;
+            gap: 12px;
+            padding: 0 8px;
+            margin: 8px auto;
+        }
+
+        .exam-sidebar-card {
+            flex: none;
+            width: 100%;
+            position: relative;
+            top: 0;
+            padding: 14px;
+        }
+
+        .questionContainer {
+            padding: 18px 14px;
+            min-height: auto;
+        }
+
+        #time {
+            font-size: 26px !important;
+        }
+
+        .marked-list li.mark {
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            font-size: 12px;
+        }
+
+        .btn-nav {
+            flex: 1;
+            padding: 12px 14px;
+            font-size: 15px;
+        }
+
+        .containerl {
+            font-size: 15px;
+            padding: 10px 14px 10px 40px !important;
+        }
+    }
+</style>
+
+<div id="exam-alert-banner"></div>
+@Html.AntiForgeryToken()
+<input type="hidden" value="@ViewBag.StudentExamID" id="StudentExamID" name="StudentExamID" />
+<input type="hidden" value="@ViewBag.NoQus" id="NoQus" name="NoQus" />
+
+<div class="page-content" style="margin-top:10px">
+    <div id="Message">@ViewBag.Message</div>
+    @{ int i = 0; int h = 0;}
+
+    <div class="exam-layout-wrapper">
+        <!-- الشريط الجانبي: العداد، حالة المزامنة، وشبكة أرقام الأسئلة -->
+        <div class="exam-sidebar-card">
+            <h3 class="head" style="text-align:center;margin-top:0;font-size:18px;color:#1e293b;font-weight:bold;">الوقت المتبقي</h3>
+            <div id="visual-timer">
+                <div id="timer-wrapper">
+                    <span id="time">00:00</span>
+                </div>
+                <!-- مؤشر حالة مزامنة الإجابات مع السيرفر لطلاب الخارج -->
+                <div id="sync-status-wrapper" style="text-align:center;margin:8px 0 15px 0;">
+                    <span id="sync-status-badge">
+                        <span id="sync-status-icon">🟢</span> <span id="sync-status-text">جميع الإجابات محفوظة</span>
+                    </span>
+                </div>
+            </div>
+
+            <ul class="marked-list">
+                @foreach (var item in Model)
+                {
+                    {
+                        h = h + 1;
+                    }
+
+                    if ((item.AnswerStudent == null && item.ChoiseQuestion.QuestionType == 1) || ((item.AnswerStudentText == null) && item.ChoiseQuestion.QuestionType != 1))
+                    {
+                        <li class="xxx-@h mark" style="background:#dc2626;" data-qno="@h">@h</li>
+                    }
+                    else
+                    {
+                        <li class="xxx-@h mark black" style="background:#0f172a;" data-qno="@h">@h</li>
+                    }
+                }
+            </ul>
+
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:20px;font-size:13px;color:#475569;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="background:#0f172a;width:12px;height:12px;border-radius:50%;display:inline-block;"></span>
+                    <span>أسئلة تم الإجابة عليها</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="background:#dc2626;width:12px;height:12px;border-radius:50%;display:inline-block;"></span>
+                    <span>أسئلة لم تُجب بعد</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- منطقة الأسئلة الرئيسية -->
+        <div class="exam-content-area body">
+            @if (Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 12 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 8 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 33 || (Model.FirstOrDefault().ChoiseQuestion.Exam.GroupNo != 7 && (Model.FirstOrDefault().ChoiseQuestion.Exam.ExamsInstTypes.Any(h1 => h1.InstTypeID == 4) || Model.FirstOrDefault().ChoiseQuestion.Exam.ExamsInstTypes.Any(h1 => h1.InstTypeID == 5)) && (Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 4 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 12 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 8 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 7 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 18 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 19 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 34 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 35 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 36 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 38 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 41 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 45 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 49 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 54 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 50 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 33)))
+            {
+                <style>
+                    .containerl { padding-left: 45px; }
+                    .questionContainer ul.answers li { text-align: left; }
+                    .checkmark { left: 0px; top: 15px; }
+                    .body div, .body ul, .body h3, .body p { direction: ltr; text-align: left; }
+                    .body ul { list-style-type: decimal; }
+                    .arabic-list li { list-style-type: lower-alpha; }
+                </style>
+            }
+            else
+            {
+                <style>
+                    ul.arabic-list { list-style-type: none; direction: rtl; }
+                    .arabic-list li { direction: rtl; list-style-type: none; }
+                    .arabic-list li:before { padding: 5px; }
+                    .arabic-list li:nth-child(28n+1):before { counter-increment: counter; content: "أ" counter(counter) "( "; }
+                    .arabic-list li:nth-child(28n+2):before { counter-increment: counter; content: "ب" counter(counter) "( "; }
+                    .arabic-list li:nth-child(28n+3):before { counter-increment: counter; content: "ج" counter(counter) "( "; }
+                    .arabic-list li:nth-child(28n+4):before { counter-increment: counter; content: "د" counter(counter) "( "; }
+                    .arabic-list li:nth-child(28n+5):before { counter-increment: counter; content: "هـ" counter(counter) "( "; }
+                    .arabic-list li:nth-child(1):before { content: 'أ) '; }
+                    .arabic-list li:nth-child(2):before { content: 'ب) '; }
+                    .arabic-list li:nth-child(3):before { content: 'ج) '; }
+                    .arabic-list li:nth-child(4):before { content: 'د) '; }
+                    .arabic-list li:nth-child(5):before { content: 'هـ) '; }
+                </style>
+            }
+
+            @foreach (var item in Model)
+            {
+                {
+                    i = i + 1;
+                }
+                <div class="questionContainer @(i == 1 ? "show" : "hide") idno c-@i" id="@Html.DisplayFor(modelItem => item.StudentChoiceExamID)" data-qindex="@i">
+                    <h3 class="text-foshia">
+                        @i -
+                        @if (item.ChoiseQuestion.QuestionType.Equals(3))
+                        {
+                        }
+                        else
+                        {
+                            if (Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 12 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 8 || (item.ChoiseQuestion.Exam.GroupNo != 7 && (Model.FirstOrDefault().ChoiseQuestion.Exam.ExamsInstTypes.Any(h1 => h1.InstTypeID == 4) || Model.FirstOrDefault().ChoiseQuestion.Exam.ExamsInstTypes.Any(h1 => h1.InstTypeID == 5)) && (item.ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 4 || item.ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 12 || item.ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 8 || item.ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 7 || item.ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 18 || item.ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 19 || item.ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 34 || item.ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 35 || item.ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 36 || item.ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 38 || item.ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 45 || item.ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 41 || item.ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 49 || item.ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 50 || item.ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 44)))
+                            {
+                                @item.ChoiseQuestion.QuationType.QuationTypeNameEn
+                            }
+                            else if (item.ChoiseQuestion.Exam.GroupNo != 7 && (item.ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 33))
+                            {
+                                @item.ChoiseQuestion.QuationType.QuationTypeNameFr
+                            }
+                            else
+                            {
+                                @item.ChoiseQuestion.QuationType.QuationTypeName
+                            }
+                        }
+                        <hr />
+                        <input type="hidden" value="@item.ChoiseQuestion.QuestionType" name="@item.ChoiseQuestion.QuestionType" id="QuationTypeID1" />
+                    </h3>
+
+                    <div class="question"
+                         style="direction:@(item.ChoiseQuestion.ApearForAll.GetValueOrDefault() ? "ltr" : "rtl");
+                                text-align:@(item.ChoiseQuestion.ApearForAll.GetValueOrDefault() ? "left" : "right");"
+                         id="que_@item.StudentChoiceExamID">
+                        @{
+                            var rawQTitle = (item.ChoiseQuestion != null && item.ChoiseQuestion.QuationTitle != null) ? item.ChoiseQuestion.QuationTitle : "";
+                            var html = ((Lesson.Areas.Student.Controllers.ExamsController)this.ViewContext.Controller).Decrypt(rawQTitle);
+                            if (html == null) { html = ""; }
+                            html = html.Replace("src=\"/", "src=\"" + Url.Content("~/") + "\"");
+                            html = Lesson.Helpers.SecurityHelper.SanitizeHtml(html);
+                            @Html.Raw(HttpUtility.HtmlDecode(html))
+                        }
+                    </div>
+
+                    @if (item.ChoiseQuestion.QuestionType.Equals(1))
+                    {
+                        var beforeClass = item.ChoiseQuestion.ApearForAll == true ? "before-ltr" : "";
+                        <ul class="arabic-list answers @beforeClass">
+                            @foreach (var y in item.ChoiseQuestion.AnswerChoices)
+                            {
+                                <li style="text-align:@(item.ChoiseQuestion.ApearForAll.GetValueOrDefault() ? "left" : "right")">
+                                    <label class="containerl" style="@(item.ChoiseQuestion.ApearForAll == true ? "padding-left:45px" : "")">
+                                        @if (y.AnswerID == item.AnswerStudent.GetValueOrDefault())
+                                        {
+                                            <input type="radio" id="que_@item.StudentChoiceExamID" name="que_@item.StudentChoiceExamID" Value="@y.AnswerID" data="@item.StudentChoiceExamID" data2="@i" data1="@item.ChoiseQuestion.QuestionType" checked="checked" />
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" id="que_@item.StudentChoiceExamID" name="que_@item.StudentChoiceExamID" Value="@y.AnswerID" data="@item.StudentChoiceExamID" data2="@i" data1="@item.ChoiseQuestion.QuestionType" />
+                                        }
+
+                                        @{
+                                            var rawAns = (y != null && y.AnswerName != null) ? y.AnswerName : "";
+                                            var htmlAnswer = ((Lesson.Areas.Student.Controllers.ExamsController)this.ViewContext.Controller).Decrypt(rawAns);
+                                            if (htmlAnswer == null) { htmlAnswer = ""; }
+                                            htmlAnswer = htmlAnswer.Replace("src=\"/", "src=\"" + Url.Content("~/")+ "\"");
+                                            htmlAnswer = Lesson.Helpers.SecurityHelper.SanitizeHtml(htmlAnswer);
+                                            <span>@Html.Raw(HttpUtility.HtmlDecode(htmlAnswer))</span>
+                                        }
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else if (item.ChoiseQuestion.QuestionType.Equals(2))
+                    {
+                        <ul class="arabic-list answers">
+                            <li>
+                                <div>
+                                    <label class="containerl">
+                                        @if (item.AnswerStudentText == "1")
+                                        {
+                                            <input type="radio" id="que_@item.StudentChoiceExamID" name="que_@item.StudentChoiceExamID" Value="1" data="@item.StudentChoiceExamID" data1="@item.ChoiseQuestion.QuestionType" data2="@i" checked />
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" id="que_@item.StudentChoiceExamID" name="que_@item.StudentChoiceExamID" Value="1" data="@item.StudentChoiceExamID" data1="@item.ChoiseQuestion.QuestionType" data2="@i" />
+                                        }
+                                        @if (item.ChoiseQuestion.ApearForAll == true || (Model.FirstOrDefault().ChoiseQuestion.Exam.GroupNo != 7 && (Model.FirstOrDefault().ChoiseQuestion.Exam.ExamsInstTypes.Any(h1 => h1.InstTypeID == 4) || Model.FirstOrDefault().ChoiseQuestion.Exam.ExamsInstTypes.Any(h1 => h1.InstTypeID == 5)) && (Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 4 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 12 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 8 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 7 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 18 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 54 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 19 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 34 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 35 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 36 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 38 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 41 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 49 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 50 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 45 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 33)))
+                                        {
+                                            <span>Yes</span>
+                                        }
+                                        else
+                                        {
+                                            <span>نعم</span>
+                                        }
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <label class="containerl">
+                                        @if (item.AnswerStudentText == "0")
+                                        {
+                                            <input type="radio" id="que_@item.StudentChoiceExamID" name="que_@item.StudentChoiceExamID" Value="0" data="@item.StudentChoiceExamID" data1="@item.ChoiseQuestion.QuestionType" data2="@i" checked />
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" id="que_@item.StudentChoiceExamID" name="que_@item.StudentChoiceExamID" Value="0" data="@item.StudentChoiceExamID" data1="@item.ChoiseQuestion.QuestionType" data2="@i" />
+                                        }
+                                        @if (item.ChoiseQuestion.ApearForAll == true || (Model.FirstOrDefault().ChoiseQuestion.Exam.GroupNo != 7 && (Model.FirstOrDefault().ChoiseQuestion.Exam.ExamsInstTypes.Any(h1 => h1.InstTypeID == 4) || Model.FirstOrDefault().ChoiseQuestion.Exam.ExamsInstTypes.Any(h1 => h1.InstTypeID == 5)) && (Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 4 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 12 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 8 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 7 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 18 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 54 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 19 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 34 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 35 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 36 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 38 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 41 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 45 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 49 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 50 || Model.FirstOrDefault().ChoiseQuestion.Exam.SubjectsStageRow.SubjectsID == 33)))
+                                        {
+                                            <span>No</span>
+                                        }
+                                        else
+                                        {
+                                            <span>لا</span>
+                                        }
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                    }
+                    else if (item.ChoiseQuestion.QuestionType.Equals(3))
+                    {
+                        <div>
+                            <textarea class="class" cols="10" rows="8" oncopy="return false"
+                                      onpaste="return false" maxlength="1000" id="que_@item.StudentChoiceExamID" name="que_@item.StudentChoiceExamID" data="@item.StudentChoiceExamID" data1="@item.ChoiseQuestion.QuestionType" data2="@i" placeholder="اكتب إجابتك هنا...">@item.AnswerStudentText</textarea>
+                            <div style="font-size:12px;color:#64748b;margin-top:4px;">
+                                <span class="chars">@(1000 - ((item.AnswerStudentText != null) ? item.AnswerStudentText.Length : 0))</span> حرف متبقي
+                            </div>
+                        </div>
+                    }
+
+                    <div style="margin:15px auto;text-align:center">
+                        <button type="button" class="save-question-button" data-question-id="@item.StudentChoiceExamID" data-type="@item.ChoiseQuestion.QuestionType">
+                            💾 حفظ إجابة هذا السؤال
+                        </button>
+                    </div>
+
+                    <div class="exam-nav-bar">
+                        <button type="button" class="btn-nav btn-nav-prev btnPrev" style="@(i == 1 ? "display:none;" : "")">السابق</button>
+                        @if (i == Model.Count())
+                        {
+                            <button type="button" class="btn-nav btn-nav-finish btnShowResult1">إنهاء وتسليم الامتحان</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn-nav btn-nav-next btnNext">التالي</button>
+                        }
+                    </div>
+
+                    <div style="text-align:center;margin-top:12px;font-size:13px;color:#64748b;">
+                        عزيزي الطالب: لا تنسَ الضغط على زر إنهاء الامتحان عقب الإجابة على جميع الأسئلة.
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+/**
+ * محرك تشغيل وإدارة امتحانات أبنائنا في الخارج (Exam Engine v2.0)
+ * تم تنظيم المتغيرات بالكامل وتأمين التزامن والتوافق مع الموبايل ومنع الثغرات
+ */
+(function ($) {
+    'use strict';
+
+    // حالة الامتحان المركزية
+    var examState = {
+        studentExamId: $("#StudentExamID").val(),
+        totalQuestions: @Model.Count(),
+        currentQuestionIndex: 1,
+        remainingSeconds: @(end),
+        timerInterval: null,
+        isSubmitting: false,
+        storageKey: 'azhar_exam_sync_' + $("#StudentExamID").val(),
+        syncQueue: [],
+        isSyncing: false,
+        tabSwitchCount: 0
+    };
+
+    // استرجاع طابور الإجابات غير المحفوظة في حال انقطاع النت السابق
+    try {
+        examState.syncQueue = JSON.parse(localStorage.getItem(examState.storageKey) || '[]');
+    } catch (e) {
+        examState.syncQueue = [];
+    }
+
+    // تحديث شارة حالة الاتصال والمزامنة لراحة الطالب
+    function updateSyncStatus(status) {
+        var $badge = $('#sync-status-badge');
+        var $icon = $('#sync-status-icon');
+        var $text = $('#sync-status-text');
+
+        if (status === 'saved') {
+            $badge.css({ 'background': '#e8f5e9', 'color': '#2e7d32', 'border-color': '#a5d6a7' });
+            $icon.text('🟢');
+            $text.text('جميع الإجابات محفوظة');
+        } else if (status === 'syncing') {
+            $badge.css({ 'background': '#fff8e1', 'color': '#f57f17', 'border-color': '#ffe082' });
+            $icon.text('🟡');
+            $text.text('جاري حفظ الإجابة...');
+        } else if (status === 'offline') {
+            $badge.css({ 'background': '#ffebee', 'color': '#c62828', 'border-color': '#ffcdd2' });
+            $icon.text('🔴');
+            $text.text('محفوظة محلياً - جاري إعادة المحاولة...');
+        }
+    }
+
+    // تسجيل إجابة جديدة وتحديث القائمة الجانبية وإضافتها لطابور الإرسال
+    function recordAnswer(questionId, questionType, answerValue, questionIndex) {
+        if (!questionId) return;
+
+        // تلوين رقم السؤال باللون الأسود دلالة على الإجابة
+        $(".xxx-" + questionIndex).addClass("black").css("background", "#0f172a");
+
+        var item = {
+            questionId: parseInt(questionId, 10),
+            questionType: parseInt(questionType, 10),
+            userAnswer: String(answerValue),
+            questionIndex: questionIndex,
+            timestamp: new Date().getTime()
+        };
+
+        // تحديث العنصر إذا كان موجوداً مسبقاً في الطابور أو إضافته
+        var foundIndex = -1;
+        for (var i = 0; i < examState.syncQueue.length; i++) {
+            if (examState.syncQueue[i].questionId === item.questionId) {
+                foundIndex = i;
+                break;
+            }
+        }
+
+        if (foundIndex >= 0) {
+            examState.syncQueue[foundIndex] = item;
+        } else {
+            examState.syncQueue.push(item);
+        }
+
+        try {
+            localStorage.setItem(examState.storageKey, JSON.stringify(examState.syncQueue));
+        } catch (e) {
+            console.warn('LocalStorage is full or disabled:', e);
+        }
+
+        dispatchSyncQueue();
+    }
+
+    // إرسال الإجابات المخزنة بالتتابع وبشكل غير متزامن إلى السيرفر
+    function dispatchSyncQueue() {
+        if (examState.isSyncing || examState.syncQueue.length === 0) return;
+
+        examState.isSyncing = true;
+        updateSyncStatus('syncing');
+
+        var task = examState.syncQueue[0];
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveQuestion")',
+            dataType: 'json',
+            timeout: 10000,
+            data: {
+                __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                StudentChoiceExamID: task.questionId,
+                AnswerStudent: task.userAnswer,
+                StudentExamID: examState.studentExamId,
+                QuestionType: task.questionType
+            },
+            success: function (response) {
+                if (response && response.isRedirect) {
+                    alert(response.messagealert || "انتهت الجلسة");
+                    window.location.href = response.redirectUrl;
+                    return;
+                }
+
+                // إزالة المهمة الناجحة من الطابور
+                examState.syncQueue.shift();
+                try {
+                    localStorage.setItem(examState.storageKey, JSON.stringify(examState.syncQueue));
+                } catch (e) {}
+
+                examState.isSyncing = false;
+
+                if (examState.syncQueue.length > 0) {
+                    dispatchSyncQueue();
+                } else {
+                    updateSyncStatus('saved');
+                }
+            },
+            error: function () {
+                examState.isSyncing = false;
+                updateSyncStatus('offline');
+                // إعادة المحاولة التلقائية بعد 3 ثوانٍ
+                setTimeout(dispatchSyncQueue, 3000);
+            }
+        });
+    }
+
+    // فحص دوري كل 8 ثوانٍ لطابور الإجابات غير المحفوظة
+    setInterval(function () {
+        if (examState.syncQueue.length > 0 && !examState.isSyncing) {
+            dispatchSyncQueue();
+        }
+    }, 8000);
+
+    // عرض السؤال المحدد وتحديث مؤشرات التنقل
+    function showQuestion(targetIndex) {
+        targetIndex = parseInt(targetIndex, 10);
+        if (isNaN(targetIndex) || targetIndex < 1 || targetIndex > examState.totalQuestions) return;
+
+        examState.currentQuestionIndex = targetIndex;
+
+        $(".questionContainer").removeClass("show").addClass("hide");
+        $(".c-" + targetIndex).removeClass("hide").addClass("show");
+
+        $(".marked-list li.mark").removeClass("active-question");
+        $(".xxx-" + targetIndex).addClass("active-question");
+
+        // إظهار أو إخفاء زر السابق
+        if (targetIndex === 1) {
+            $(".btn-nav-prev").css("display", "none");
+        } else {
+            $(".btn-nav-prev").css("display", "inline-flex");
+        }
+
+        // تمرير سلس للأعلى في الموبايل
+        if (window.innerWidth < 992) {
+            var el = document.querySelector('.c-' + targetIndex);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    }
+
+    // إغلاق وتسليم الامتحان النهائي
+    function closeAndSubmitExam() {
+        if (examState.isSubmitting) return;
+
+        // التأكد من استكمال حفظ جميع الإجابات العالقة أولاً
+        if (examState.syncQueue.length > 0) {
+            showWarningBanner('جاري استكمال حفظ آخر إجاباتك على السيرفر، برجاء الانتظار ثوانٍ...', false);
+            setTimeout(closeAndSubmitExam, 1500);
+            return;
+        }
+
+        examState.isSubmitting = true;
+        showWarningBanner('جاري إنهاء وتسليم الامتحان وتوثيق نتيجتك...', false);
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CloseExam")',
+            dataType: 'json',
+            cache: false,
+            data: {
+                __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                StudentExamID: examState.studentExamId
+            },
+            success: function (response) {
+                if (response && response.isRedirect) {
+                    try {
+                        localStorage.removeItem(examState.storageKey);
+                    } catch (e) {}
+                    window.location.href = response.redirectUrl;
+                } else {
+                    examState.isSubmitting = false;
+                    alert("تم حفظ الامتحان، يرجى تسجيل الخروج.");
+                }
+            },
+            error: function () {
+                examState.isSubmitting = false;
+                alert("حدث خطأ أثناء الاتصال بالسيرفر لإغلاق الامتحان. يرجى إعادة المحاولة.");
+            }
+        });
+    }
+
+    // تأكيد التسليم مع فحص الأسئلة المتروكة
+    function confirmExamSubmission() {
+        var answeredCount = $('.marked-list .black').length;
+        var total = examState.totalQuestions;
+
+        if (answeredCount === total) {
+            if (confirm("هل أنت متأكد من الانتهاء وتسليم الامتحان بالكامل؟")) {
+                closeAndSubmitExam();
+            }
+        } else {
+            var unanswered = total - answeredCount;
+            var prompt1 = "تنبيه: يوجد " + unanswered + " أسئلة لم تقم بالإجابة عليها بعد!\nهل تريد بالفعل إنهاء وتسليم الامتحان الآن؟";
+            var prompt2 = "تأكيد نهائي: لن تتمكن من تعديل أي إجابة بعد التسليم.\nهل تود المتابعة والإغلاق؟";
+
+            if (confirm(prompt1) && confirm(prompt2)) {
+                closeAndSubmitExam();
+            }
+        }
+    }
+
+    // إدارة العداد التنازلي للوقت
+    function initTimer(durationSeconds) {
+        var remaining = durationSeconds;
+        var display = document.querySelector('#time');
+        if (!display) return;
+
+        if (examState.timerInterval) {
+            clearInterval(examState.timerInterval);
+        }
+
+        function updateDisplay() {
+            var minutes = parseInt(remaining / 60, 10);
+            var seconds = parseInt(remaining % 60, 10);
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            display.textContent = minutes + ":" + seconds;
+
+            if (remaining <= 300 && remaining > 60) {
+                display.style.color = "#d97706";
+            } else if (remaining <= 60) {
+                display.style.color = "#dc2626";
+            }
+        }
+
+        updateDisplay();
+
+        examState.timerInterval = setInterval(function () {
+            remaining--;
+            if (remaining <= 0) {
+                clearInterval(examState.timerInterval);
+                display.textContent = "00:00";
+                alert("انتهى وقت الامتحان بالكامل! سيتم الآن إرسال إجاباتك تلقائياً.");
+                closeAndSubmitExam();
+            } else {
+                updateDisplay();
+            }
+        }, 1000);
+    }
+
+    // أحداث التفاعل عند تحميل المستند
+    $(document).ready(function () {
+        initTimer(examState.remainingSeconds);
+        showQuestion(1);
+
+        // التنقل عبر الضغط على أرقام الأسئلة
+        $(document).on('click', '.marked-list li.mark', function () {
+            var num = $(this).attr('data-qno') || $(this).text().trim();
+            showQuestion(num);
+        });
+
+        // زر التالي
+        $(document).on('click', '.btn-nav-next', function (e) {
+            e.preventDefault();
+            showQuestion(examState.currentQuestionIndex + 1);
+        });
+
+        // زر السابق
+        $(document).on('click', '.btn-nav-prev', function (e) {
+            e.preventDefault();
+            showQuestion(examState.currentQuestionIndex - 1);
+        });
+
+        // زر انتهاء وتسليم الامتحان
+        $(document).on('click', '.btnShowResult1, .btn-nav-finish', function (e) {
+            e.preventDefault();
+            confirmExamSubmission();
+        });
+
+        // راديو بوتون (اختيار من متعدد وصح/خطأ)
+        $(document).on('change', 'input[type="radio"]', function () {
+            if ($(this).is(':checked')) {
+                var qId = $(this).attr('data');
+                var qType = $(this).attr('data1');
+                var userVal = $(this).val();
+                var qIndex = $(this).attr('data2');
+                recordAnswer(qId, qType, userVal, qIndex);
+            }
+        });
+
+        // عداد الحروف للأسئلة المقالية
+        $(document).on('keyup input', 'textarea.class', function () {
+            var maxLen = 1000;
+            var currentLen = $(this).val().length;
+            var remainingChars = maxLen - currentLen;
+            $(this).parent().find('.chars').text(Math.max(0, remainingChars));
+        });
+
+        // حفظ نص السؤال المقالي عند الانتهاء من الكتابة أو مغادرة الحقل
+        $(document).on('change blur', 'textarea.class', function () {
+            var val = $(this).val();
+            if (val.length <= 1000) {
+                var qId = $(this).attr('data');
+                var qType = $(this).attr('data1');
+                var qIndex = $(this).attr('data2');
+                recordAnswer(qId, qType, val, qIndex);
+            } else {
+                alert("تجاوزت الحد الأقصى للحروف (1000 حرف فقط). يرجى تقليص الإجابة للحفظ.");
+            }
+        });
+
+        // زر حفظ السؤال اليدوي (لراحة الطالب)
+        $(document).on('click', '.save-question-button', function (e) {
+            e.preventDefault();
+            var qId = $(this).attr('data-question-id');
+            var qType = $(this).attr('data-type');
+            var $container = $(this).closest('.questionContainer');
+            var userVal = null;
+
+            var $radio = $container.find('input[type="radio"]:checked');
+            if ($radio.length > 0) {
+                userVal = $radio.val();
+            } else {
+                var $textarea = $container.find('textarea.class');
+                if ($textarea.length > 0) {
+                    userVal = $textarea.val();
+                }
+            }
+
+            if (!userVal) {
+                alert("يرجى اختيار أو كتابة الإجابة أولاً قبل الضغط على حفظ.");
+                return;
+            }
+
+            var qIndex = examState.currentQuestionIndex;
+            recordAnswer(qId, qType, userVal, qIndex);
+            showWarningBanner('✅ تم تسجيل إجابتك وجاري مزامنتها مع السيرفر', false);
+        });
+
+        // منع الرجوع للخلف بالمتصفح
+        window.history.forward(1);
+        window.history.pushState(null, "", window.location.href);
+        window.onpopstate = function () {
+            window.history.pushState(null, "", window.location.href);
+        };
+    });
+
+    // إظهار شريط التنبيهات في أعلى الصفحة
+    function showWarningBanner(msg, isUrgent) {
+        var $banner = $('#exam-alert-banner');
+        $banner.text(msg);
+        $banner.css({
+            'background-color': isUrgent ? '#dc2626' : '#d97706',
+            'color': '#ffffff'
+        }).stop(true, true).fadeIn();
+        setTimeout(function () { $banner.fadeOut(); }, 5000);
+    }
+
+    // حماية الامتحان: منع الزر الأيمن
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+        showWarningBanner('⚠️ النقر بزر الفأرة الأيمن غير مسموح به أثناء الامتحان', false);
+        return false;
+    });
+
+    // منع النسخ، والقص، واللصق
+    document.addEventListener('copy', function (e) { e.preventDefault(); showWarningBanner('⚠️ نسخ نصوص الأسئلة غير مسموح به', true); return false; });
+    document.addEventListener('cut', function (e) { e.preventDefault(); return false; });
+    document.addEventListener('paste', function (e) { e.preventDefault(); return false; });
+
+    // منع أدوات الفحص F12 و Ctrl+U و Ctrl+S
+    document.addEventListener('keydown', function (e) {
+        if (e.keyCode === 123) { e.preventDefault(); return false; }
+        if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) { e.preventDefault(); return false; }
+        if (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 80 || e.keyCode === 67)) { e.preventDefault(); return false; }
+    });
+
+    // مراقبة مغادرة نافذة الامتحان (رادع نفسي بالمتصفح)
+    document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+            examState.tabSwitchCount++;
+            showWarningBanner('⚠️ تنبيه: مغادرة صفحة الامتحان مسجلة على السيرفر! (المرة رقم ' + examState.tabSwitchCount + ')', true);
+        }
+    });
+
+    // تنبيه قبل مغادرة الصفحة بالخطأ
+    window.addEventListener('beforeunload', function (e) {
+        if (!examState.isSubmitting) {
+            var msg = 'هل أنت متأكد من مغادرة الامتحان؟ الإجابات غير المسلمة قد تفقد.';
+            e.returnValue = msg;
+            return msg;
+        }
+    });
+
+    // تنبيهات اقتراب الوقت
+    if (examState.remainingSeconds > 300) {
+        setTimeout(function () {
+            showWarningBanner('⏰ تنبيه: متبقي 5 دقائق فقط على انتهاء وقت الامتحان!', false);
+        }, (examState.remainingSeconds - 300) * 1000);
+    }
+    if (examState.remainingSeconds > 60) {
+        setTimeout(function () {
+            showWarningBanner('⚠️ تنبيه عاجل: متبقية دقيقة واحدة فقط على انتهاء الامتحان وتسليم الإجابات!', true);
+        }, (examState.remainingSeconds - 60) * 1000);
+    }
+
+})(jQuery);
+</script>

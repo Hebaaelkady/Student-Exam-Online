@@ -1,0 +1,45 @@
+## ============================================================
+## Visual Studio & .NET GitIgnore
+## ============================================================
+
+# الملفات السرية وبيانات الاتصال - لا يتم رفعها أبداً
+**/ConnectionStrings.config
+**/AppSettings.secrets.config
+*.secrets.config
+
+# مجلدات البناء والمخرجات
+[Bb]in/
+[Oo]bj/
+[Aa]pp_[Dd]ata/
+publish/
+publish1/
+oldpublish/
+New folder/
+New folder/**
+
+# مجلدات وإعدادات فيجوال ستوديو المؤقتة
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# حزم NuGet
+packages/
+*.nupkg
+
+# ملفات السجلات والمؤقتة
+*.log
+*.tmp
+*.bak
+*.cache
+
+# ملفات نظام ويندوز المؤقتة
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+

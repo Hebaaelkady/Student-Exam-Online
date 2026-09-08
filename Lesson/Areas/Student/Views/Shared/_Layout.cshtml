@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>امتحانات أبناؤنا في الخارج - الأزهر الشريف</title>
+
+    <!--[if lte IE 8]>
+    <script src="@Url.Content("~/assets/js/html5shiv.min.js")"></script>
+    <script src="@Url.Content("~/assets/js/respond.min.js")"></script>
+    <![endif]-->
+    <link href="@Url.Content("~/Content/Common.css?v=2026_01")" rel="stylesheet" />
+    <script src="@Url.Content("~/Scripts/jquery.js")"></script>
+
+    <style>
+        /* =========================================================
+           تصميم الهيدر وشريط بيانات الطالب والفوتر (Azhar Master Layout)
+           ========================================================= */
+        body {
+            background-color: #f1f5f9 !important;
+            font-family: 'DroidKufi', 'Segoe UI', Tahoma, Arial, sans-serif !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            direction: rtl;
+        }
+
+        /* الهيدر الرئيسي الموحد */
+        .azhar-main-header {
+            background: linear-gradient(135deg, #0a3d2b 0%, #0d5038 60%, #136347 100%) !important;
+            box-shadow: 0 4px 16px rgba(10, 61, 43, 0.25);
+            border-bottom: 3px solid #c59b27;
+            padding: 10px 20px;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .header-inner {
+            max-width: 1250px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .azhar-logo {
+            height: 52px;
+            width: auto;
+            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25));
+        }
+
+        .header-titles {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-title-main {
+            font-size: 20px;
+            font-weight: 900;
+            color: #ffffff;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .header-title-sub {
+            font-size: 13px;
+            font-weight: bold;
+            color: #f6d87d;
+            margin: 2px 0 0 0;
+            line-height: 1.2;
+        }
+
+        .header-gov-badge span {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* شريط معلومات وبيانات الطالب */
+        .student-info-bar {
+            max-width: 1250px;
+            margin: 12px auto 8px auto;
+            padding: 0 15px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            box-sizing: border-box;
+        }
+
+        .info-badge {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 7px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+            font-size: 13px;
+            color: #334155;
+        }
+
+        .student-name-badge {
+            background: #f0fdf4 !important;
+            border-color: #bbf7d0 !important;
+        }
+
+        .student-name-badge .badge-value {
+            color: #166534;
+            font-weight: bold;
+        }
+
+        .badge-icon {
+            font-size: 14px;
+        }
+
+        .badge-label {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .badge-value {
+            color: #0f172a;
+            font-weight: bold;
+        }
+
+        .logout-badge {
+            margin-right: auto;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }
+
+        .btn-modern-logout {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #fee2e2;
+            color: #b91c1c !important;
+            border: 1px solid #fca5a5;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            text-decoration: none !important;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-modern-logout:hover {
+            background: #dc2626;
+            color: #ffffff !important;
+            border-color: #dc2626;
+        }
+
+        /* الحاوية الرئيسية للمحتوى */
+        .main-container {
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 0 15px;
+            box-sizing: border-box;
+        }
+
+        .main-content {
+            width: 100%;
+        }
+
+        .main-content-inner {
+            width: 100%;
+        }
+
+        /* الفوتر */
+        .azhar-main-footer {
+            background: #072a1e;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            padding: 15px 20px;
+            margin-top: 35px;
+            font-size: 13px;
+            border-top: 2px solid #c59b27;
+        }
+
+        @@media (max-width: 768px) {
+            .azhar-main-header {
+                padding: 8px 12px;
+            }
+
+            .azhar-logo {
+                height: 42px;
+            }
+
+            .header-title-main {
+                font-size: 17px;
+            }
+
+            .header-title-sub {
+                font-size: 11px;
+            }
+
+            .header-gov-badge {
+                display: none;
+            }
+
+            .student-info-bar {
+                gap: 6px;
+                padding: 0 8px;
+            }
+
+            .info-badge {
+                flex: 1 1 calc(50% - 6px);
+                font-size: 12px;
+                padding: 6px 8px;
+            }
+
+            .student-name-badge {
+                flex: 1 1 100%;
+            }
+
+            .logout-badge {
+                flex: 1 1 100%;
+                margin-top: 4px;
+            }
+
+            .btn-modern-logout {
+                width: 100%;
+                justify-content: center;
+                padding: 9px;
+            }
+        }
+    </style>
+</head>
+<body class="no-skin rtl" contextmenu="return false;">
+    <script>
+        $(document).ready(function () {
+            $(this).bind("contextmenu", function (e) {
+                e.preventDefault();
+            });
+        });
+    </script>
+
+    <!-- الهيدر الرئيسي الموحد لمنظومة الأزهر الشريف -->
+    <header class="azhar-main-header">
+        <div class="header-inner">
+            <div class="header-brand">
+                <img src="@Url.Content("~/images/Lo3.png")" alt="شعار الأزهر الشريف" class="azhar-logo" />
+                <div class="header-titles">
+                    <h1 class="header-title-main">الأزهر الشريف</h1>
+                    <h2 class="header-title-sub">بوابة امتحانات أبناؤنا في الخارج</h2>
+                </div>
+            </div>
+            <div class="header-gov-badge">
+                <span>مركز البيانات - مشيخة الازهر الشريف </span>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container ace-save-state" id="main-container">
+        <!-- شريط معلومات الطالب المتجاوب (Responsive Info Badges) -->
+        <div class="student-info-bar">
+            <div class="info-badge student-name-badge">
+                <span class="badge-icon">👤</span>
+                <span class="badge-label">مرحباً:</span>
+                <strong id="name" class="badge-value"></strong>
+            </div>
+            <div class="info-badge">
+                <span class="badge-icon">📚</span>
+                <span class="badge-label">الصف والمرحلة:</span>
+                <span class="badge-value"><span id="RowName"></span> <span id="StageName"></span></span>
+            </div>
+            <div class="info-badge">
+                <span class="badge-icon">🏫</span>
+                <span class="badge-label">المعهد:</span>
+                <span id="InstName" class="badge-value"></span>
+            </div>
+            <div class="info-badge">
+                <span class="badge-icon">🌍</span>
+                <span class="badge-label">البلد:</span>
+                <span id="CountryName" class="badge-value"></span>
+            </div>
+            <div class="info-badge">
+                <span class="badge-icon">🏛️</span>
+                <span class="badge-label">نوع المعهد:</span>
+                <span id="InstType" class="badge-value"></span>
+            </div>
+            <div class="info-badge">
+                <span class="badge-icon">👥</span>
+                <span class="badge-label">المجموعة:</span>
+                <span id="GroupNoName" class="badge-value"></span>
+            </div>
+            <div class="info-badge logout-badge">
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="main-content-inner">
+                @RenderBody()
+            </div>
+        </div>
+
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse" style="display:none;">
+            <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+        </a>
+    </div>
+
+    <!-- الفوتر الرئيسي الموحد -->
+    <footer class="azhar-main-footer">
+        <div class="footer-container">
+            <span>الأزهر الشريف &copy; جميع الحقوق محفوظة - قطاع المعاهد الأزهرية</span>
+        </div>
+    </footer>
+
+    <script src="@Url.Content("~/assets/js/jquery.ui.touch-punch.min.js")"></script>
+
+    <script>
+        $(window).on("load", function () {
+            var requrl = '@Url.Action("GetName", "Exams", new { area = "Student" })';
+            $.ajax({
+                type: "post",
+                dataType: 'json',
+                cache: true,
+                url: requrl,
+                data: {},
+                success: function (json) {
+                    if (json && json.isRedirect) {
+                        window.location.href = json.redirectUrl;
+                    } else if (json) {
+                        $('#name').text(json.StudentName || '');
+                        $('#RowName').text(json.RowName || '');
+                        $('#StageName').text(json.StageName ? (' ' + json.StageName) : '');
+                        $('#InstName').text(json.InstName || '');
+                        $('#CountryName').text(json.CountryName || '');
+                        $('#InstType').text(json.InstType || '');
+                        $('#GroupNoName').text(json.GroupNoName || '');
+                    }
+                },
+                error: function (failure) {
+                    console.error('Failed to load student header info:', failure.responseText);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+﻿<!-- هذا ملف توضيحي فقط يوضح للمطور كيف يربط قاعدة البيانات - لا تضع هنا كلمات المرور الحقيقية -->
+<connectionStrings>
+	<add name="DefaultConnection"
+		 connectionString="Data Source=YOUR_SERVER_NAME;User ID=YOUR_DB_USER;Password=YOUR_DB_PASSWORD;initial catalog=StudentExamOutside"
+		 providerName="System.Data.SqlClient" />
+	<add name="LessonsEntities"
+		 connectionString="metadata=res://*/Models.Lessons.csdl|res://*/Models.Lessons.ssdl|res://*/Models.Lessons.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=YOUR_SERVER_NAME;User ID=YOUR_DB_USER;Password=YOUR_DB_PASSWORD;initial catalog=StudentExamOutside;App=EntityFramework&quot;"
+		 providerName="System.Data.EntityClient" />
+</connectionStrings>

@@ -1,0 +1,317 @@
+@using Lesson.Models
+@model LoginViewModel
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>تسجيل الدخول - امتحانات أبناؤنا في الخارج - الأزهر الشريف</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/Common.css?v=2026_01")" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'DroidKufi', 'Segoe UI', Tahoma, Arial, sans-serif;
+        }
+
+        body {
+            background: #0076a8 url('@Url.Content("~/images/interface.jpg")') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 15px;
+            direction: rtl;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 20px;
+            box-shadow: 0 15px 45px rgba(0, 30, 60, 0.35);
+            padding: 35px 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .auth-logo {
+            width: 85px;
+            height: auto;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        }
+
+        .auth-header-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0f3e2e;
+            margin-bottom: 4px;
+        }
+
+        .auth-header-sub {
+            font-size: 14px;
+            color: #c59b27;
+            font-weight: bold;
+            margin-bottom: 22px;
+        }
+
+        .alert-banner {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 18px;
+            text-align: right;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            text-align: right;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 14px;
+            font-size: 16px;
+            color: #64748b;
+            pointer-events: none;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 48px;
+            padding: 10px 42px 10px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #f8fafc;
+            color: #1e293b;
+            transition: all 0.2s ease;
+            direction: rtl;
+        }
+
+        .form-input:focus {
+            border-color: #136347;
+            background: #ffffff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(19, 99, 71, 0.15);
+        }
+
+        .field-validation-error {
+            color: #dc2626;
+            font-size: 12px;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .btn-submit-auth {
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(135deg, #c59b27 0%, #a47e1b 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(164, 126, 27, 0.35);
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .btn-submit-auth:hover {
+            background: linear-gradient(135deg, #b58d1e 0%, #8c6a14 100%);
+            transform: translateY(-1px);
+        }
+
+        .btn-submit-auth:active {
+            transform: translateY(1px);
+        }
+
+        .auth-footer {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .hotline-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .copyright-text {
+            font-size: 12px;
+            color: #ffffff;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        @@media (max-width: 480px) {
+            .auth-card {
+                padding: 26px 18px;
+            }
+            .auth-header-title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <img src="@Url.Content("~/images/Lo3.png")" alt="شعار الأزهر الشريف" class="auth-logo" />
+            <h1 class="auth-header-title">الأزهر الشريف</h1>
+            <h2 class="auth-header-sub">بوابة امتحانات أبناؤنا في الخارج</h2>
+
+            @{
+                var errorList = new System.Collections.Generic.List<string>();
+                if (!string.IsNullOrEmpty(ViewBag.message as string))
+                {
+                    errorList.Add(ViewBag.message as string);
+                }
+                if (!string.IsNullOrEmpty(ViewBag.x as string))
+                {
+                    errorList.Add(ViewBag.x as string);
+                }
+                if (!ViewData.ModelState.IsValid)
+                {
+                    foreach (var state in ViewData.ModelState.Values)
+                    {
+                        foreach (var err in state.Errors)
+                        {
+                            if (!string.IsNullOrEmpty(err.ErrorMessage) && !errorList.Contains(err.ErrorMessage))
+                            {
+                                errorList.Add(err.ErrorMessage);
+                            }
+                        }
+                    }
+                }
+            }
+
+            @if (errorList.Count > 0)
+            {
+                <div class="alert-banner" id="loginAlert">
+                    @foreach (var err in errorList)
+                    {
+                        <div>@err</div>
+                    }
+                </div>
+            }
+
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label class="form-label" for="UserName">الرقم القومي للطالب</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-input", placeholder = "أدخل الرقم القومي", required = "required", autocomplete = "username" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.UserName)
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="IDNumber">رقم الجلوس</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔒</span>
+                        @Html.TextBoxFor(m => m.IDNumber, new { @class = "form-input", placeholder = "أدخل رقم الجلوس", required = "required", autocomplete = "current-password" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.IDNumber)
+                </div>
+
+                <button type="submit" class="btn-submit-auth">
+                    تسجيل الدخول
+                </button>
+            }
+
+            <div class="auth-footer">
+                <div class="hotline-box">
+                    <span>📞</span>
+                    <span>الخط الساخن للاستفسارات والدعم: <strong>19493</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <p class="copyright-text">
+            جميع الحقوق محفوظة &copy; الأزهر الشريف - قطاع المعاهد الأزهرية
+        </p>
+    </div>
+
+    @if (ViewBag.WaitSeconds != null && (int)ViewBag.WaitSeconds > 0)
+    {
+        <script>
+            (function () {
+                var timeLeft = @ViewBag.WaitSeconds;
+                var btn = document.querySelector(".btn-submit-auth");
+                var alertEl = document.getElementById("loginAlert");
+
+                if (btn) {
+                    btn.disabled = true;
+                    btn.style.opacity = "0.6";
+                    btn.style.cursor = "not-allowed";
+                }
+
+                var timer = setInterval(function () {
+                    timeLeft--;
+                    if (alertEl) {
+                        alertEl.innerHTML = "<div>لقد استنفدت عدة محاولات غير صحيحة، يرجى الانتظار <strong>" + timeLeft + "</strong> ثانية ثم إعادة المحاولة.</div>";
+                    }
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        if (btn) {
+                            btn.disabled = false;
+                            btn.style.opacity = "1";
+                            btn.style.cursor = "pointer";
+                            btn.innerText = "تسجيل الدخول";
+                        }
+                        if (alertEl) {
+                            alertEl.innerHTML = "<div style='color: #166534;'>يمكنك الآن المحاولة مرة أخرى.</div>";
+                            alertEl.style.background = "#f0fdf4";
+                            alertEl.style.borderColor = "#bbf7d0";
+                        }
+                    }
+                }, 1000);
+            })();
+        </script>
+    }
+</body>
+</html>

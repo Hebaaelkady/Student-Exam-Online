@@ -1,0 +1,49 @@
+﻿﻿@model IEnumerable<Lesson.Models.StudentExam>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Student/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+ 
+@using (Html.BeginForm())
+
+{
+<input type="text"  id="id" name="id" />
+<input type="submit" value="بحث" style="width: 15%;color: #fff;background: #D19F05;border-radius: 20px;padding: 10px;text-align: center;" />
+                }
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+          الصف 
+        </th>
+        <th>
+           العدد
+        </th>
+        
+    </tr>
+
+    @foreach (var item in Model.GroupBy(k => k.Exam.SubjectsStageRow.StageRow))
+    {
+        <tr>
+            <td>
+                @item.FirstOrDefault().Exam.SubjectsStageRow.StageRow1.Row.RowName @item.FirstOrDefault().Exam.SubjectsStageRow.StageRow1.Stage.StageName
+            </td>
+            <td> @item.Count()</td>
+            @*<td> @Model.</td>*@
+        </tr>
+         
+        
+    }
+</table>
+<script>fetch('https://api.ipregistry.co/?key=tryout')
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (payload) {
+           alert(payload.location.country.name + ', ' + payload.location.city);
+        });</script>

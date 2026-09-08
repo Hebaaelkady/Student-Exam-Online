@@ -1,0 +1,107 @@
+﻿﻿@model List<Lesson.Models.SupportTicket>
+@{
+    ViewBag.Title = "تقرير الطالب"; 
+    Layout = "~/Areas/Student/Views/Shared/_LayoutAdmin.cshtml";
+
+
+}
+<h3 class="mb-4">🗄️ التذاكر المؤرشفة</h3>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>النوع</th>
+            <th>الوصف</th>
+            <th>الطالب</th>
+            <th>تاريخ الأرشفة</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            foreach (var t in Model)
+            {
+                <tr>
+                    <td>
+                        @{
+                            string ticketText = "";
+                            string badgeClass = "badge-secondary";
+
+                            switch (t.TicketType)
+                            {
+                                case "Not open":
+                                    ticketText = "لم يتم فتح الامتحان";
+                                    badgeClass = "badge-danger";
+                                    break;
+
+                                case "Question":
+                                    ticketText = "السؤال لا يظهر";
+                                    badgeClass = "badge-warning";
+                                    break;
+
+                                case "Time":
+                                    ticketText = "انتهى الوقت فجأة";
+                                    badgeClass = "badge-info";
+                                    break;
+
+                                case "Other":
+                                    ticketText = "أخرى";
+                                    badgeClass = "badge-secondary";
+                                    break;
+                            }
+                        }
+
+                        <span class="  px-3 py-2">
+                            @ticketText
+                        </span>
+                    </td>
+                    <td>@t.Description</td>
+                    <td>@t.AspNetUser.StudentName</td>
+                    <td>
+                        @(t.ClosedAt)
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center text-muted">
+                    لا توجد تذاكر مؤرشفة
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (ViewBag.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                <a class="page-link"
+                   href="@Url.Action("ArchivedTickets", new { page = ViewBag.CurrentPage - 1 })">
+                    السابق
+                </a>
+            </li>
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link"
+                       href="@Url.Action("ArchivedTickets", new { page = i })">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                <a class="page-link"
+                   href="@Url.Action("ArchivedTickets", new { page = ViewBag.CurrentPage + 1 })">
+                    التالي
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+}

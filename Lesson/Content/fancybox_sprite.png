@@ -1,0 +1,43 @@
+And l h s and an r h as variables.
+
+03:53.230 --> 04:00.370
+Both of which are going to have to be generic so we specify that those are going to be of the same type
+
+04:01.090 --> 04:02.740
+as the method itself.
+
+04:02.740 --> 04:06.190
+So the method in this case is going to be working with the T.
+
+04:06.210 --> 04:11.940
+Type and then in the second image we see how we can test this lab.
+
+04:12.160 --> 04:14.160
+We are defining two integers.
+
+04:14.380 --> 04:21.970
+And to this lab we specifying its type to be int is that we write the name of the method and in angle
+
+04:21.970 --> 04:23.770
+brackets we said the type.
+
+04:24.340 --> 04:30.990
+And then in parenthesis we are still writing ref and passing the values.
+
+04:31.200 --> 04:35.900
+Now because we are doing this referencing an object that already contains the type.
+
+04:36.320 --> 04:40.000
+Adding the type in angle brackets is actually no longer necessary.
+
+04:40.260 --> 04:47.060
+That's why you will see that visual studio like Grace it out because it's no longer necessary at least
+
+04:47.060 --> 04:53.060
+not in this context because we are already letting the method know which type is it going to work with
+
+04:53.480 --> 04:59.330
+by referencing an integer because we are referencing an integer then the compiler is going to assume
+
+04:59.630 --> 05:01.790
+that that is the type that it ha

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b2bef074e628491492d891d2f737474f" Name="Diagram1" ZoomLevel="81">
+        <EntityTypeShape EntityType="LessonsModel.AspNetUserRoles" Width="1.5" PointX="3" PointY="1.375" />
+        <EntityTypeShape EntityType="LessonsModel.GroupNo" Width="1.5" PointX="3.375" PointY="25.125" />
+        <EntityTypeShape EntityType="LessonsModel.Row" Width="1.5" PointX="3.75" PointY="29.625" />
+        <EntityTypeShape EntityType="LessonsModel.StageRow" Width="1.5" PointX="1.5" PointY="22.625" />
+        <EntityTypeShape EntityType="LessonsModel.Stage" Width="1.5" PointX="3.75" PointY="27" />
+        <AssociationConnector Association="LessonsModel.FK_StageRow_Rows" />
+        <AssociationConnector Association="LessonsModel.FK_StageRow_Stages" />
+        <EntityTypeShape EntityType="LessonsModel.AnswerChoice" Width="1.5" PointX="11.5" PointY="17" />
+        <EntityTypeShape EntityType="LessonsModel.AnswerChoiceTerm2" Width="1.5" PointX="19.5" PointY="21" />
+        <EntityTypeShape EntityType="LessonsModel.AspNetRole" Width="1.5" PointX="0.75" PointY="0.875" />
+        <EntityTypeShape EntityType="LessonsModel.AspNetUserClaim" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="LessonsModel.AspNetUserRole" Width="1.5" PointX="3" PointY="0.875" />
+        <EntityTypeShape EntityType="LessonsModel.AspNetUser" Width="1.5" PointX="12.375" PointY="23.75" />
+        <EntityTypeShape EntityType="LessonsModel.AspNetUsers1" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="LessonsModel.ChoiseQuestion" Width="1.5" PointX="9.25" PointY="17.125" />
+        <EntityTypeShape EntityType="LessonsModel.ChoiseQuestionTerm2" Width="1.5" PointX="17.25" PointY="24" />
+        <EntityTypeShape EntityType="LessonsModel.CountryTime" Width="1.5" PointX="10.125" PointY="31.375" />
+        <EntityTypeShape EntityType="LessonsModel.Date" Width="1.5" PointX="4.75" PointY="3.75" />
+        <EntityTypeShape EntityType="LessonsModel.Exam" Width="1.5" PointX="7" PointY="22.5" />
+        <EntityTypeShape EntityType="LessonsModel.ExamsInstType" Width="1.5" PointX="12.25" PointY="20.25" />
+        <EntityTypeShape EntityType="LessonsModel.ExamsInstTypeTerm2" Width="1.5" PointX="15.25" PointY="20.25" />
+        <EntityTypeShape EntityType="LessonsModel.ExamsTerm2" Width="1.5" PointX="10" PointY="22.5" />
+        <EntityTypeShape EntityType="LessonsModel.Institute" Width="1.5" PointX="4.75" PointY="32.25" />
+        <EntityTypeShape EntityType="LessonsModel.InstType" Width="1.5" PointX="10" PointY="14.25" />
+        <EntityTypeShape EntityType="LessonsModel.LoginSession" Width="1.5" PointX="14.625" PointY="41.25" />
+        <EntityTypeShape EntityType="LessonsModel.Mazhab" Width="1.5" PointX="4.75" PointY="35.25" />
+        <EntityTypeShape EntityType="LessonsModel.QuationType" Width="1.5" PointX="7" PointY="18.125" />
+        <EntityTypeShape EntityType="LessonsModel.Sho3ba" Width="1.5" PointX="2.5" PointY="17.25" />
+        <EntityTypeShape EntityType="LessonsModel.st" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="LessonsModel.StudentChoiceExam" Width="1.5" PointX="21.875" PointY="20.625" />
+        <EntityTypeShape EntityType="LessonsModel.StudentChoiceExamTerm2" Width="1.5" PointX="21.875" PointY="24.625" />
+        <EntityTypeShape EntityType="LessonsModel.StudentComment" Width="1.5" PointX="14.625" PointY="23" />
+        <EntityTypeShape EntityType="LessonsModel.StudentExam" Width="1.5" PointX="17.625" PointY="29.875" />
+        <EntityTypeShape EntityType="LessonsModel.StudentExamsTerm2" Width="1.5" PointX="19.625" PointY="24.625" />
+        <EntityTypeShape EntityType="LessonsModel.StudentSubjectNotInTerm1" Width="1.5" PointX="14.625" PointY="27.125" />
+        <EntityTypeShape EntityType="LessonsModel.StudentT7laf" Width="1.5" PointX="14.625" PointY="30.625" />
+        <EntityTypeShape EntityType="LessonsModel.Subject" Width="1.5" PointX="2.5" PointY="19.75" />
+        <EntityTypeShape EntityType="LessonsModel.SubjectsStageRow" Width="1.5" PointX="4.75" PointY="17.875" />
+        <EntityTypeShape EntityType="LessonsModel.sysdiagram" Width="1.5" PointX="4.75" PointY="6.75" />
+        <EntityTypeShape EntityType="LessonsModel.AspNetUserLogin" Width="1.5" PointX="6.75" PointY="5.75" />
+        <AssociationConnector Association="LessonsModel.FK_AnswerChoice_ChoiseQuestion" />
+        <AssociationConnector Association="LessonsModel.FK_AnswerChoiceTerm2_ChoiseQuestion" />
+        <AssociationConnector Association="LessonsModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" />
+        <AssociationConnector Association="LessonsModel.FK_AspNetUsers_CountryTime" />
+        <AssociationConnector Association="LessonsModel.FK_AspNetUsers_GroupNo" />
+        <AssociationConnector Association="LessonsModel.FK_AspNetUsers_GroupNo1" />
+        <AssociationConnector Association="LessonsModel.FK_AspNetUsers_Institute" />
+        <AssociationConnector Association="LessonsModel.FK_AspNetUsers_InstType" />
+        <AssociationConnector Association="LessonsModel.FK_AspNetUsers_Mazhab" />
+        <AssociationConnector Association="LessonsModel.FK_AspNetUsers_Rows" />
+        <AssociationConnector Association="LessonsModel.FK_AspNetUsers_Sho3ba" />
+        <AssociationConnector Association="LessonsModel.FK_AspNetUsers_Stages" />
+        <AssociationConnector Association="LessonsModel.FK_LoginSession_AspNetUsers" />
+        <AssociationConnector Association="LessonsModel.FK_StudentComment_AspNetUsers" />
+        <AssociationConnector Association="LessonsModel.FK_StudentExams_AspNetUsers" />
+        <AssociationConnector Association="LessonsModel.FK_StudentExamsTerm2_AspNetUsers1" />
+        <AssociationConnector Association="LessonsModel.FK_StudentSubjectNotInTerm1_AspNetUsers" />
+        <AssociationConnector Association="LessonsModel.FK_StudentT7laf_StudentT7laf" />
+        <AssociationConnector Association="LessonsModel.FK_ChoiseQuestion_Exams" />
+        <AssociationConnector Association="LessonsModel.FK_ChoiseQuestion_QuationType" />
+        <AssociationConnector Association="LessonsModel.FK_StudentChoiceExam_ChoiseQuestion" />
+        <AssociationConnector Association="LessonsModel.FK_ChoiseQuestionTerm2_Exams" />
+        <AssociationConnector Association="LessonsModel.FK_ChoiseQuestionTerm2_QuationType" />
+        <AssociationConnector Association="LessonsModel.FK_StudentChoiceExamTerm2_ChoiseQuestionTerm2" />
+        <AssociationConnector Association="LessonsModel.FK_Exams_GroupNo" />
+        <AssociationConnector Association="LessonsModel.FK_Exams_Institute" />
+        <AssociationConnector Association="LessonsModel.FK_Exams_Mazhab" />
+        <AssociationConnector Association="LessonsModel.FK_Exams_SubjectsStageRow" />
+        <AssociationConnector Association="LessonsModel.FK_ExamsInstType_Exams" />
+        <AssociationConnector Association="LessonsModel.FK_StudentExams_Exams" />
+        <AssociationConnector Association="LessonsModel.FK_ExamsInstType_InstType" />
+        <AssociationConnector Association="LessonsModel.FK_ExamsInstTypeTerm2_ExamsTerm2" />
+        <AssociationConnector Association="LessonsModel.FK_ExamsInstTypeTerm2_InstType" />
+        <AssociationConnector Association="LessonsModel.FK_ExamsTerm2_GroupNo" />
+        <AssociationConnector Association="LessonsModel.FK_ExamsTerm2_Institute" />
+        <AssociationConnector Association="LessonsModel.FK_ExamsTerm2_Mazhab" />
+        <AssociationConnector Association="LessonsModel.FK_ExamsTerm2_SubjectsStageRow" />
+        <AssociationConnector Association="LessonsModel.FK_StudentExamsTerm2_ExamsTerm21" />
+        <AssociationConnector Association="LessonsModel.FK_SubjectsTerm_Sho3ba" />
+        <AssociationConnector Association="LessonsModel.FK_SubjectsTerm_StageRow" />
+        <AssociationConnector Association="LessonsModel.FK_StudentChoiceExam_StudentExams" />
+        <AssociationConnector Association="LessonsModel.FK_StudentChoiceExamTerm2_ChoiseQuestion" />
+        <AssociationConnector Association="LessonsModel.FK_StudentSubjectNotInTerm1_Subject" />
+        <AssociationConnector Association="LessonsModel.FK_SubjectsTerm_Subject" />
+        <EntityTypeShape EntityType="LessonsModel.SupportTicket" Width="1.5" PointX="20.625" PointY="30.125" />
+        <AssociationConnector Association="LessonsModel.FK_SupportTicket_Student" />
+        <AssociationConnector Association="LessonsModel.FK_SupportTicket_Exam" />
+        <AssociationConnector Association="LessonsModel.FK_SupportTicket_Subject" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

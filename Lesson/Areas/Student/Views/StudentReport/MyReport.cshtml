@@ -1,0 +1,194 @@
+﻿@model  Lesson.Models.StudentReportPageVM 
+ 
+
+@{
+    ViewBag.Title = "تقرير الطالب";
+    var student = ViewBag.Student;
+    Layout = "~/Areas/Student/Views/Shared/_LayoutAdmin.cshtml";
+  
+
+}
+<style>
+    .alert-danger, .alert-info {
+        display: block !important
+    }
+</style>
+<div class="container mt-4">
+
+    <!-- بيانات الطالب -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">👤 بيانات الطالب</h5>
+        </div>
+        <div class="card-body row">
+            <div class="col-md-6">
+                <p><strong>الاسم:</strong> @student.StudentName</p>
+
+            </div>
+            <div class="col-md-6">
+                <p><strong>رقم الطالب:</strong> @student.StudentNumber</p>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- الإحصائيات -->
+    <div class="row text-center mb-4">
+        <div class="col-md-6">
+            <div class="alert alert-info shadow">
+                <h6>عدد الامتحانات</h6>
+                <h3>@ViewBag.TotalExams</h3>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="alert alert-danger shadow">
+                <h6>أسئلة غير مجابة</h6>
+                <h3>@ViewBag.TotalUnanswered</h3>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- الدعم الفني -->
+    <div class="card shadow">
+        <div class="card-header bg-warning">
+            🛠️ التواصل مع الدعم الفني
+        </div><div class="alert alert-info text-center">
+            📝 عدد البلاغات اليوم: <strong>@ViewBag.TicketsToday</strong> من 2
+            <br />
+            ⏳ المتبقي: <strong>@ViewBag.RemainingTickets</strong>
+        </div>
+
+        <div class="card-body">
+
+
+
+
+
+
+            @if (ViewBag.RemainingTickets == 0)
+            {
+                <div class="alert alert-danger text-center">
+                    ❌ لقد وصلت للحد الأقصى من البلاغات اليوم
+                    <br />
+                    يمكنك المحاولة غدًا
+                </div>
+            }
+            else
+            {
+
+
+
+                using (Html.BeginForm("SendSupport", "StudentReport", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        <label class="form-label">نوع المشكلة</label>
+                        <select name="TicketType" class="form-select" required>
+                            <option value="">-- اختر --</option>
+                            <option value="Not open">لم يتم فتح الامتحان</option>
+                            <option value="Question">السوال لا يظهر</option>
+                            <option value="Time">انتهى الوقت فجأة</option>
+                            <option value="Other">أخرى</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">المادة / الامتحان</label>
+                        @Html.DropDownList(
+                              "ExamId", // نغير الاسم من SubjectId إلى ExamId
+                              (List<SelectListItem>)ViewBag.Subjects,
+                              "-- اختر الامتحان --",
+                              new { @class = "form-select", required = "required" }
+                          )
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label">وصف المشكلة</label>
+                        <textarea name="Description"
+                                  id="Description"
+                                  class="form-control"
+                                  rows="4"
+                                  maxlength="60"
+                                   ></textarea>
+                        <small class="text-muted">
+                            متبقي <span id="charCount">60</span> حرف
+                        </small>
+                    </div>
+
+                    <script>
+                        const textarea = document.getElementById("Description");
+                        const counter = document.getElementById("charCount");
+
+                        textarea.addEventListener("input", function () {
+                            counter.textContent = 60 - this.value.length;
+                        });
+                    </script>
+
+                    <button type="submit"
+                            class="btn btn-danger w-100"
+                            @(ViewBag.RemainingTickets == 0 ? "disabled" : "")>
+                        إرسال المشكلة
+                    </button>
+
+                }
+
+            }
+        </div>
+    </div>
+    <div class="card shadow mt-4">
+        <div class="card-header bg-secondary text-white">
+            📩 البلاغات السابقة
+        </div>
+
+        <div class="card-body">
+            @if (!Model.MyTickets.Any())
+            {
+                <div class="alert alert-info text-center">
+                    لا توجد بلاغات سابقة
+                </div>
+            }
+            else
+            {
+                foreach (var ticket in Model.MyTickets)
+                {
+                    <div class="border rounded p-3 mb-3">
+                        <p><strong>نوع البلاغ:</strong> @ticket.TicketType</p>
+                        <p><strong>الوصف:</strong> @ticket.Description</p>
+                        <p>
+                            <strong>الحالة:</strong>
+                            <span class="badge @(ticket.Status == "Open" ? "bg-warning" : "bg-success")">
+                                @ticket.Status
+                            </span>
+                        </p>
+
+                        @if (!string.IsNullOrEmpty(ticket.ActionTaken))
+                        {
+                            <div class="alert alert-success mt-2">
+                                🛠️ رد الدعم الفني: <br />
+                                <strong>@ticket.ActionTaken</strong>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <script>
+    const remaining = @ViewBag.RemainingTickets;
+
+    if (remaining === 0) {
+        alert("لقد استهلكت عدد البلاغات المسموح بها اليوم");
+    }
+    </script>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success mt-3 text-center">
+            @TempData["Success"]
+        </div>
+    }
+</div>

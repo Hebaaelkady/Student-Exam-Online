@@ -1,0 +1,10 @@
+@using Microsoft.AspNet.Identity
+ 
+<form action="@Url.Action("LogOff", "Account", new { area = "" })" method="post" id="logoutForm" class="logout-form-inline" style="margin:0;display:inline-block;">
+    @Html.AntiForgeryToken()
+    <a href="javascript:document.getElementById('logoutForm').submit()" class="btn-modern-logout" title="تسجيل الخروج من المنظومة">
+        <span class="logout-icon">🚪</span>
+        <span>تسجيل خروج</span>
+    </a>
+</form>
+ 

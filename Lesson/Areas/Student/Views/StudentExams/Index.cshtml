@@ -1,0 +1,89 @@
+﻿﻿@model IEnumerable<Lesson.Models.StudentExam>
+
+@{
+    ViewBag.Title = "Index";
+
+}
+
+<h2>بحث</h2>
+<div class="page-content">
+    <div class="span-xs12" style="background:#fff; margin-top:10px ;text-align:center;padding:20px 0;">
+        @using (Html.BeginForm())
+
+        {
+            <span>بحث برقم الجلوس</span>
+            <input type="text" id="id" name="id" style="width:50%" />
+            <input type="submit" value="بحث" />
+        }
+        @if(@ViewBag.UserName != null)
+        {
+
+      
+        <table class="table" width="100%" border="1">
+            <tr><td>الاسم: @ViewBag.StudentName</td><td>القومي : @ViewBag.UserName</td></tr>
+            <tr><td>الصف/المرحلة: @ViewBag.RowName @ViewBag.StageName</td>
+            </tr>
+            <tr><td>المذهب: @ViewBag.MazhabName</td><td>الشعبة : @ViewBag.Sho3baName</td></tr>
+            <tr><td>الدولة : @ViewBag.CountryName</td><td>المجموعة : @ViewBag.GroupNoName</td></tr>
+            <tr><td>المعهد: @ViewBag.InstName</td><td>نوع المعهد : @ViewBag.TypeName</td></tr>
+        </table>
+        <br /> <br />
+        <table class="table" width="100%" border="1">
+            <tr>
+                <th>
+                    المادة
+                </th>
+                <th>
+                    تاريخ الدخول
+                </th>
+                <th>
+                    تاريخ الانتهاء
+                </th>
+                <th>
+                  اجمالي االاسيلة
+                </th>
+                <th>
+                اجمالي ماتم الاجابة عليه
+                </th>
+
+            </tr>
+
+            @foreach (var item in Model.OrderBy(l=>l.StartAt))
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Exam.SubjectsStageRow.Subject.SubjectName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartAt)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndAt)
+                    </td>
+                    <td>
+                        @{ int o = 0;}
+                        @foreach (var t in item.Exam.ChoiseQuestions)
+                        {
+
+                            o++;
+                        }
+                        @o
+                    </td>
+                    <td>
+
+                        @{ int o1 = 0;}
+                        @foreach (var t in item.StudentChoiceExams.Where(g => g.AnswerStudent != null || g.AnswerStudentText != null))
+                        {
+
+                            o1++;
+                        }
+                        @o1
+                        @*//       @Html.DisplayFor(modelItem => item.StudentChoiceExams.Where(g=>g.AnswerStudent!=null&&g.AnswerStudentText!=null).Count())*@
+                    </td>
+                </tr>
+            }
+
+        </table>
+        } </div>
+</div>

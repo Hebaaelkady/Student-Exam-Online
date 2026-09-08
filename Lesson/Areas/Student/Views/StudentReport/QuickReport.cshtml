@@ -1,0 +1,94 @@
+﻿﻿@{
+    ViewBag.Title = "تقرير سريع - حالة الطالب";
+    Layout = "~/Areas/Student/Views/Shared/_LayoutAdmin.cshtml";
+}
+<style>
+    .alert-danger{
+        display:block !important
+    }
+</style>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">
+                <i class="fas fa-bolt"></i> @ViewBag.Title
+            </h3>
+        </div>
+
+        <div class="card-body">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle"></i> @ViewBag.Error
+                </div>
+            }
+
+            <!-- نموذج البحث السريع -->
+            <div class="row mb-4">
+                <div class="col-md-6 offset-md-3">
+                    <form method="get" action="@Url.Action("QuickReport")" class="input-group">
+                        <input type="number" name="studentNumber" class="form-control"
+                               placeholder="أدخل رقم الطالب" required />
+                        <select name="term" class="form-control" style="max-width: 150px;">
+                            <option value="1">الفصل الأول</option>
+                            <option value="2">الفصل الثاني</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> بحث
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            @if (ViewBag.StudentNumber != null)
+            {
+                <div class="text-center">
+                    <div class="alert @(ViewBag.HasUnanswered ? "alert-danger" : "alert-success")">
+                        <h4>
+                            <i class="fas @(ViewBag.HasUnanswered ? "fa-times-circle" : "fa-check-circle") fa-3x mb-3"></i><br />
+                            @ViewBag.StudentName<br />
+                            <small>رقم الطالب: @ViewBag.StudentNumber</small>
+                        </h4>
+
+                        <hr />
+
+                        <h2>
+                            @ViewBag.Message
+                        </h2>
+
+                        @if (ViewBag.HasUnanswered)
+                        {
+                            <p class="mt-3">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                يوجد أسئلة لم تتم الإجابة عليها في بعض الامتحانات
+                            </p>
+                        }
+                        else
+                        {
+                            <p class="mt-3">
+                                <i class="fas fa-check-circle"></i>
+                                تم الإجابة على جميع الأسئلة في الامتحانات المسجلة
+                            </p>
+                        }
+                    </div>
+
+                    <div class="mt-4">
+                      
+
+                        <a href="@Url.Action("Index")" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-search"></i> بحث جديد
+                        </a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="text-center text-muted">
+                    <i class="fas fa-user-graduate fa-5x mb-3"></i>
+                    <h4>أدخل رقم الطالب لعرض حالته</h4>
+                    <p>سيظهر هنا تقرير سريع عما إذا كان لديه أسئلة غير مجابة أم لا</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

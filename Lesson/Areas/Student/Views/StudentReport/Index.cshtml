@@ -1,0 +1,126 @@
+﻿﻿@model Lesson.Models.StudentSearchModel
+@{
+    ViewBag.Title = "تقرير الأسئلة غير المجابة";
+    Layout = "~/Areas/Student/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title">
+                <i class="fas fa-search"></i> @ViewBag.Title
+            </h3>
+        </div>
+        <div class="card-body">
+            @using (Html.BeginForm("GenerateReport", "StudentReport", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.StudentNumber, "رقم الطالب", new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.StudentNumber, new { @class = "form-control", placeholder = "أدخل رقم الطالب", type = "number" })
+                            @Html.ValidationMessageFor(model => model.StudentNumber, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.StudentName, "اسم الطالب", new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.StudentName, new { @class = "form-control", placeholder = "أدخل اسم الطالب" })
+                            @Html.ValidationMessageFor(model => model.StudentName, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">الفصل الدراسي</label><br />
+                            <div class="form-check form-check-inline">
+                                @Html.RadioButtonFor(model => model.Term, 1, new { @class = "form-check-input", @checked = "checked", id = "term1" })
+                                <label class="form-check-label" for="term1">الفصل الأول</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                @Html.RadioButtonFor(model => model.Term, 2, new { @class = "form-check-input", id = "term2" })
+                                <label class="form-check-label" for="term2">الفصل الثاني</label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="form-group mt-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-chart-bar"></i> توليد التقرير
+                            </button>
+                            <button type="reset" class="btn btn-secondary btn-lg">إعادة تعيين</button>
+                            <a href="@Url.Action("QuickReport", new { studentNumber = 0 })" class="btn btn-info btn-lg">
+                                <i class="fas fa-bolt"></i> تقرير سريع
+                            </a>
+                        </div>
+                    </div>
+                    <small class="form-text text-muted mt-2">
+                        <i class="fas fa-info-circle"></i> يمكنك البحث برقم الطالب أو اسمه أو تركهما فارغين للحصول على جميع الطلاب
+                    </small>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- إحصاءات سريعة -->
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">تقرير سريع</h5>
+                            <p class="card-text">تحقق من حالة طالب محدد</p>
+                        </div>
+                        <i class="fas fa-user-graduate fa-3x"></i>
+                    </div>
+                    <a href="@Url.Action("QuickReport", new { studentNumber = 0 })" class="btn btn-light btn-block mt-2">اذهب للتقرير السريع</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // جلب قائمة المواد عند تحميل الصفحة
+            loadSubjects();
+
+            function loadSubjects() {
+                $.ajax({
+                    url: '@Url.Action("GetSubjects", "StudentReport")',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        var dropdown = $('#subjectList');
+                        dropdown.empty();
+                        dropdown.append('<option value="">-- جميع المواد --</option>');
+
+                        $.each(data, function(index, item) {
+                            dropdown.append('<option value="' + item.id + '">' + item.name + '</option>');
+                        });
+                    },
+                    error: function() {
+                        console.log('حدث خطأ في جلب المواد');
+                    }
+                });
+            }
+
+            // تأكيد عند الضغط على زر التقرير السريع
+            $('a[href*="QuickReport"]').click(function(e) {
+                var studentNum = prompt("أدخل رقم الطالب:");
+                if (studentNum && !isNaN(studentNum)) {
+                    var href = $(this).attr('href');
+                    href = href.replace('studentNumber=0', 'studentNumber=' + studentNum);
+                    window.location.href = href;
+                }
+                e.preventDefault();
+            });
+        });
+    </script>
+}

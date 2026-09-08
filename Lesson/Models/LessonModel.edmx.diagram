@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ef1e56c4ab534b36a92558971d0bf1e2" Name="Diagram1" ZoomLevel="46">
+        <EntityTypeShape EntityType="LessonsModel.Answer" Width="1.5" PointX="17.25" PointY="9.625" />
+        <EntityTypeShape EntityType="LessonsModel.AspNetRole" Width="1.5" PointX="14.75" PointY="2.5" />
+        <EntityTypeShape EntityType="LessonsModel.AspNetUserClaim" Width="1.5" PointX="19.25" PointY="1" />
+        <EntityTypeShape EntityType="LessonsModel.AspNetUser" Width="1.5" PointX="17" PointY="1.375" />
+        <EntityTypeShape EntityType="LessonsModel.ExamType" Width="1.5" PointX="12.75" PointY="1.25" />
+        <EntityTypeShape EntityType="LessonsModel.LessonsMod" Width="1.5" PointX="9.75" PointY="9.25" />
+        <EntityTypeShape EntityType="LessonsModel.LessonText" Width="1.5" PointX="12" PointY="6.75" />
+        <EntityTypeShape EntityType="LessonsModel.Level" Width="1.5" PointX="12.75" PointY="4.375" />
+        <EntityTypeShape EntityType="LessonsModel.Mkfof" Width="1.5" PointX="12" PointY="22.5" />
+        <EntityTypeShape EntityType="LessonsModel.QuationType" Width="1.5" PointX="12.75" PointY="14.625" />
+        <EntityTypeShape EntityType="LessonsModel.QuestionMqal" Width="1.5" PointX="12" PointY="9.5" />
+        <EntityTypeShape EntityType="LessonsModel.Question" Width="1.5" PointX="15" PointY="8.375" />
+        <EntityTypeShape EntityType="LessonsModel.Row" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="LessonsModel.StageRow" Width="1.5" PointX="3" PointY="9.5" />
+        <EntityTypeShape EntityType="LessonsModel.Stage" Width="1.5" PointX="0.75" PointY="9.75" />
+        <EntityTypeShape EntityType="LessonsModel.Subject" Width="1.5" PointX="3" PointY="6.625" />
+        <EntityTypeShape EntityType="LessonsModel.SubjectsTerm" Width="1.5" PointX="5.25" PointY="9.125" />
+        <EntityTypeShape EntityType="LessonsModel.sysdiagram" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="LessonsModel.Term" Width="1.5" PointX="3" PointY="13" />
+        <EntityTypeShape EntityType="LessonsModel.Unit" Width="1.5" PointX="7.5" PointY="9.625" />
+        <EntityTypeShape EntityType="LessonsModel.Video" Width="1.5" PointX="12" PointY="19.5" />
+        <EntityTypeShape EntityType="LessonsModel.AspNetUserLogin" Width="1.5" PointX="19.25" PointY="3.75" />
+        <EntityTypeShape EntityType="LessonsModel.V_StageRow" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="LessonsModel.View_QuesAnswer" Width="1.5" PointX="4.75" PointY="0.75" />
+        <AssociationConnector Association="LessonsModel.FK_Answer_Questions" />
+        <AssociationConnector Association="LessonsModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="LessonsModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="LessonsModel.FK_Questions_ExamTypes" />
+        <AssociationConnector Association="LessonsModel.FK_Lessons_Units" />
+        <AssociationConnector Association="LessonsModel.FK_LessonText_Lessons" />
+        <AssociationConnector Association="LessonsModel.FK_Mkfof_LessonsMod" />
+        <AssociationConnector Association="LessonsModel.FK_QuestionMqal_LessonsMod" />
+        <AssociationConnector Association="LessonsModel.FK_Questions_Questions" />
+        <AssociationConnector Association="LessonsModel.FK_Videos_Lessons" />
+        <AssociationConnector Association="LessonsModel.FK_Questions_Levels" />
+        <AssociationConnector Association="LessonsModel.FK_QuestionMqal_QuationType" />
+        <AssociationConnector Association="LessonsModel.FK_Questions_QuationType" />
+        <AssociationConnector Association="LessonsModel.FK_StageRow_Rows" />
+        <AssociationConnector Association="LessonsModel.FK_StageRow_Stages" />
+        <AssociationConnector Association="LessonsModel.FK_SubjectsTerm_StageRow" />
+        <AssociationConnector Association="LessonsModel.FK_SubjectsTerm_Subject" />
+        <AssociationConnector Association="LessonsModel.FK_SubjectsTerm_Terms" />
+        <AssociationConnector Association="LessonsModel.FK_Units_SubjectsTerm" />
+        <AssociationConnector Association="LessonsModel.AspNetUserRoles" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

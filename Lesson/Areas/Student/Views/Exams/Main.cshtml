@@ -1,0 +1,303 @@
+﻿@{
+    ViewBag.Title = "بوابة الامتحانات";
+    Layout = "~/Areas/Student/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* =========================================================
+       تصميم بطاقة امتحان الطالب (Student Exam Dashboard Card)
+       ========================================================= */
+    .exam-dashboard-wrapper {
+        max-width: 850px;
+        margin: 25px auto;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+
+    .exam-dashboard-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e2e8f0;
+        padding: 30px 25px;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .exam-card-header {
+        border-bottom: 2px solid #f1f5f9;
+        padding-bottom: 20px;
+        margin-bottom: 22px;
+    }
+
+    .exam-icon-circle {
+        width: 60px;
+        height: 60px;
+        line-height: 60px;
+        background: #fef9c3;
+        border: 2px solid #fde047;
+        border-radius: 50%;
+        margin: 0 auto 12px auto;
+        font-size: 26px;
+        box-shadow: 0 4px 10px rgba(253, 224, 71, 0.3);
+    }
+
+    .exam-subject-title {
+        font-size: 23px;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0 0 12px 0;
+    }
+
+    .subject-name-highlight {
+        color: #0a3d2b;
+    }
+
+    .exam-tags-row {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .exam-tag {
+        background: #f1f5f9;
+        color: #334155;
+        border: 1px solid #cbd5e1;
+        padding: 4px 12px;
+        border-radius: 14px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .tag-label {
+        color: #64748b;
+    }
+
+    .exam-instructions-box {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin: 20px 0;
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .instruction-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        color: #334155;
+    }
+
+    .instruction-icon {
+        font-size: 16px;
+    }
+
+    .exam-action-area {
+        margin: 28px 0;
+    }
+
+    .btn-start-exam-main {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-width: 250px;
+        height: 52px;
+        padding: 0 32px;
+        border: none;
+        border-radius: 10px;
+        font-size: 18px;
+        font-weight: 800;
+        color: #ffffff;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+    }
+
+    .btn-start {
+        background: linear-gradient(135deg, #c59b27 0%, #a47e1b 100%);
+        box-shadow: 0 6px 18px rgba(164, 126, 27, 0.35);
+    }
+
+    .btn-start:hover {
+        background: linear-gradient(135deg, #b58d1e 0%, #8c6a14 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-resume {
+        background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+        box-shadow: 0 6px 18px rgba(22, 163, 74, 0.35);
+    }
+
+    .btn-resume:hover {
+        background: linear-gradient(135deg, #15803d 0%, #166534 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-icon {
+        font-size: 18px;
+    }
+
+    .exam-status-card {
+        padding: 28px 18px;
+        background: #fffbeb;
+        border: 2px solid #fef3c7;
+        border-radius: 12px;
+        margin: 20px 0;
+    }
+
+    .status-icon {
+        font-size: 38px;
+        margin-bottom: 8px;
+    }
+
+    .status-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #92400e;
+        margin: 0 0 8px 0;
+    }
+
+    .status-text {
+        font-size: 15px;
+        color: #78350f;
+        margin: 0;
+    }
+
+    .exam-card-footer {
+        border-top: 2px solid #f1f5f9;
+        padding-top: 18px;
+        margin-top: 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .logout-reminder {
+        font-size: 13px;
+        color: #64748b;
+    }
+
+    .hotline-badge span {
+        background: #f0fdf4;
+        color: #166534;
+        border: 1px solid #bbf7d0;
+        padding: 5px 14px;
+        border-radius: 18px;
+        font-size: 13px;
+        display: inline-block;
+    }
+
+    @@media (max-width: 768px) {
+        .exam-dashboard-wrapper {
+            margin: 12px auto;
+            padding: 0 8px;
+        }
+
+        .exam-dashboard-card {
+            padding: 20px 14px;
+        }
+
+        .exam-subject-title {
+            font-size: 19px;
+        }
+
+        .btn-start-exam-main {
+            width: 100%;
+            min-width: unset;
+            font-size: 16px;
+            height: 48px;
+        }
+    }
+</style>
+
+<div class="page-content exam-dashboard-wrapper">
+    <div class="exam-dashboard-card">
+        <!-- رأس بطاقة الامتحان والمادة -->
+        <div class="exam-card-header">
+            <div class="exam-icon-circle">
+                <span>📝</span>
+            </div>
+            <h2 class="exam-subject-title">
+                امتحان مادة: <span class="subject-name-highlight">@ViewBag.subject</span>
+            </h2>
+            <div class="exam-tags-row">
+                @if (ViewBag.Sho3baName != null)
+                {
+                    <span class="exam-tag"><span class="tag-label">الشعبة:</span> @ViewBag.Sho3baName</span>
+                }
+                @if (ViewBag.MazhabName != null)
+                {
+                    <span class="exam-tag"><span class="tag-label">المذهب:</span> @ViewBag.MazhabName</span>
+                }
+            </div>
+        </div>
+
+        <div class="exam-card-body">
+            @if (ViewBag.show == 1 || ViewBag.show == 2)
+            {
+                <div class="exam-instructions-box">
+                    <div class="instruction-item">
+                        <span class="instruction-icon">ℹ️</span>
+                        <span>عدد أسئلة الامتحان: <strong>@ViewBag.CountQuestions</strong> سؤال.</span>
+                    </div>
+                    <div class="instruction-item">
+                        <span class="instruction-icon">🔄</span>
+                        <span>في حال ظهور عدد أسئلة أقل، يُرجى إعادة تحديث الصفحة (Refresh).</span>
+                    </div>
+                    <div class="instruction-item">
+                        <span class="instruction-icon">⚠️</span>
+                        <span>تأكد من تسليم الامتحان والضغط على زر الانتهاء فور إتمام الإجابة.</span>
+                    </div>
+                </div>
+
+                <div class="exam-action-area">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        if (ViewBag.show == 2)
+                        {
+                            <input type="hidden" value="2" name="Tokon1" />
+                            <button type="submit" class="btn-start-exam-main btn-resume">
+                                <span class="btn-icon">▶️</span>
+                                <span>استكمال الامتحان</span>
+                            </button>
+                        }
+                        else if (ViewBag.show == 1)
+                        {
+                            <input type="hidden" value="1" name="Tokon1" />
+                            <button type="submit" class="btn-start-exam-main btn-start">
+                                <span class="btn-icon">🚀</span>
+                                <span>بدء الامتحان</span>
+                            </button>
+                        }
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="exam-status-card">
+                    <div class="status-icon">⏳</div>
+                    <h3 class="status-title">حالة الامتحان</h3>
+                    <p class="status-text">@ViewBag.stat</p>
+                </div>
+            }
+        </div>
+
+        <!-- تذييل البطاقة -->
+        <div class="exam-card-footer">
+            <div class="logout-reminder">
+                <span>تنبيه هام: يجب التأكد من تسجيل الخروج بعد أداء الامتحان مباشرة وعدم ترك الجلسة مفتوحة.</span>
+            </div>
+            <div class="hotline-badge">
+                <span>📞 الخط الساخن للدعم الفني والاستفسارات: <strong>19493</strong></span>
+            </div>
+        </div>
+    </div>
+</div>
